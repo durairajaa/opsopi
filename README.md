@@ -8,6 +8,9 @@ Opsopi is open source price comparision extension for google chrome, it helps to
 - Opsopi will popup on product pages
 - Click on the opsopi to see price of the product in other sites
 
+![demo1](./opsopi_demo_img)
+
+
 ### Adding more sites:
 Opsopi works on all major sites if you want to make opsopy to work on a site you can do by adding
 custom javascript to the extension
