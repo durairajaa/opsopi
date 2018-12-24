@@ -10,9 +10,11 @@ Opsopi is open source price comparision extension for google chrome, it helps to
 
 ![demo1](./opsopi_demo_img.png)
 
+![demo1](./opsopi_demo_img_1.png)
+
 
 ### Adding more sites:
-Opsopi works on all major sites if you want to make opsopy to work on a site you can do by adding
+Opsopi works on all major sites if you want to make opsopi to work on a site you can do by adding
 custom javascript to the extension
 
 ##### Adding new sites using Javascipt:
@@ -21,7 +23,7 @@ custom javascript to the extension
 - Click settings button in the popup
 - Click Manage sites button in the settings page
 - Give the url of the site you want to add press "Add site" button
-- Click the "I will give my Javascript File" and follow the walk through
+- Click the "I will give my Javascript File" button and follow the walk through
  
 opsopi requires two javascript files for each site you want to add
 - backsearch script
@@ -48,7 +50,7 @@ This script will have access to the following:
 -this script has access to jquery 
 
 #### Example adding script
-The following scripts can be used to www.amazon.in
+The following scripts is used to add www.amazon.in
 
 ###### example backsearch script
 ```
