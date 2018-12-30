@@ -1,3 +1,5 @@
+var template_main_container =
+`
 <template id="main_template_dock_left">
 
 
@@ -244,3 +246,4 @@
 
 </template>
 
+`

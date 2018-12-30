@@ -1,3 +1,5 @@
+var template_results_template = 
+`
 <template id="makkhi_results">
     <div class="item" style="margin:0px; text-align: left;">
         <a class="result_link" href="" target="_blank" >
@@ -139,3 +141,4 @@
         </div> 
     
 </template>
+`

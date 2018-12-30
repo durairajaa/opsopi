@@ -1,6 +1,6 @@
 function back_search_ta(prod_deets) {
     console.log(prod_deets);
-    var searchURL = "http://redsky.target.com/v1/plp/search?kwr=y&keyword=" + encodeURIComponent(prod_deets.prod_title) + "&count=10&offset=0";
+    var searchURL = "http://redsky.target.com/v1/plp/search?kwr=y&keyword=" + encodeURIComponent(prod_deets.prod_title);
     var dyn_req = backPostGet({
         type: "GET",
         url: searchURL,
@@ -16,11 +16,12 @@ function back_search_ta(prod_deets) {
             insert_price_result_box(make_results_box(extracted_deets, 'searchid', false));
         } else {
             // nothing found
-            console.log("nothing found for eb");
+            console.log("nothing found for target");
+            console.log(extracted_deets.is_found , title_filter(prod_deets.prod_title, extracted_deets.title));
             // insert manual search
             insert_manual_search_box(make_manual_search_box({
                 "prod_site": "ta",
-                "prod_link": searchURL,
+                "prod_link": "https://www.target.com/s?searchTerm=" + encodeURIComponent(prod_deets.prod_title),
                 "website": "target",
                 "title": prod_deets.prod_title,
                 "img_src": prod_deets.prod_img

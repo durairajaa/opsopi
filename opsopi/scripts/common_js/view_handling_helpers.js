@@ -90,32 +90,10 @@ function insert_main_container() {
 
 
     function load_template() {
-        var link = document.createElement('link');
-        link.rel = 'import';
-        link.href = chrome.extension.getURL('design_files/main_container.html');
-        //link.setAttribute('async', ''); // make it async!
-        link.onload = function(e) {
-            var content = this.import
-            console.log("main container import success")
-            chrome.storage.local.get({
-                "gcm_id": "",
-                "user_id": ""
-            }, function(response) {
-                id_deets['gcm_id'] = response.gcm_id;
-                id_deets['user_id'] = response.user_id;
-            });
-            do_post_template_load_task(content);
-            this.remove();
-            console.log("removed main container import")
-            setevents();
-            // make_results_template();
-            insert_preview_box();
-
-        }
-        link.onerror = function(e) {
-
-        };
-        document.head.appendChild(link);
+        var content = $("<div/>").append(template_main_container)[0];
+        do_post_template_load_task(content);
+        setevents();
+        insert_preview_box();
     }
 
 
@@ -290,23 +268,12 @@ function insert_main_container() {
 
 function insert_preview_box() {
 
-    var link = document.createElement('link');
-    link.rel = 'import';
-    link.href = chrome.extension.getURL('design_files/preview_box_templates.html');
-    //link.setAttribute('async', ''); // make it async!
-    link.onload = function(e) {
-        var content = this.import
-        console.log("main container import success")
-        do_post_template_load_task(content);
-        this.remove();
-        make_preview_draggable();
-        console.log("removed main container import");
-        make_results_template();
-    }
-    link.onerror = function(e) {
+    var content = $("<div/>").append(template_preview_box)[0];
+    do_post_template_load_task(content);
+    make_preview_draggable();
+    make_results_template();
 
-    };
-    document.head.appendChild(link);
+
 
     function do_post_template_load_task(main_temlpate_content) {
         console.log(main_temlpate_content);
@@ -383,24 +350,9 @@ function update_preview_min(price) {
 
 
 function make_results_template() {
-    //lpading template
-    var link = document.createElement('link');
-    link.rel = 'import';
-    link.href = chrome.extension.getURL('design_files/results_template.html');
-    //link.setAttribute('async', ''); // make it async!
-    link.onload = function(e) {
-        var content = this.import
-        console.log("result template import success")
-        do_post_template_load_task(content);
-        this.remove();
-        console.log("removed result template import")
-
-        check_user_settings_show_results();
-    };
-    link.onerror = function(e) {
-
-    };
-    document.head.appendChild(link);
+    var content = $("<div/>").append(template_results_template)[0];
+    do_post_template_load_task(content);
+    check_user_settings_show_results();
 
     function do_post_template_load_task(template_html) {
         all_result_templates = template_html.cloneNode(true);

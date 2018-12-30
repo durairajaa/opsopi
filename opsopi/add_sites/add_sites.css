@@ -171,3 +171,30 @@ button.normal:hover{
 .js_result_value{
 	color:#2e3437;
 }
+
+.nav-buttons-container{
+    display: flex;
+    justify-content: space-between;
+}
+
+.nav-back {
+    color:#82ceee;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.nav-stop-adding{
+    outline: none;
+    padding-top: 1px;
+    height: 20px;
+    color: #82ceee;
+    background-color: white;
+    border: 1px solid;
+    cursor:pointer;
+}
+
+.nav-stop-adding:hover{
+    color: white;
+    background-color: #82ceee;
+
+}

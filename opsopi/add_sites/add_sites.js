@@ -170,6 +170,13 @@ function get_js_from_user() {
     document.querySelector("#disp_div").appendChild(elem);
 }
 
+function get_confirmation_to_add_pp_file(file_name){
+    var template = document.querySelector("#pp_script_add_confirm").content;
+    var elem = template.cloneNode(true);
+    document.querySelector("#disp_div").innerHTML = "";
+    document.querySelector("#disp_div").appendChild(elem);
+    $("#disp_div h2").text("Add "+file_name+" as pp script?");
+}
 
 function get_js_pp_from_user() {
     var template = document.querySelector("#file_upload_pp").content;
@@ -413,8 +420,15 @@ function init() {
                 if (!link.startsWith("http")) {
                     link = "http://" + link;
                 }
-                window.open(link);
-                window.close();
+
+                var add_site_deets = response.add_site_deets;
+                add_site_deets["state"] = "waiting_for_user_search";
+
+                chrome.storage.local.set({"add_site_deets":add_site_deets},function(){
+                    do_not_do_cleanup_add_sites = true;
+                    window.open(link);
+                    window.close();
+                })
             }
         })
     });
@@ -442,11 +456,9 @@ function init() {
             var add_site_deets = response.add_site_deets;
             if (add_site_deets['state']) {
                 add_site_deets['state'] = "getting_js_from_user"
-                chrome.storage.local.set()
+                chrome.storage.local.set({"add_site_deets":add_site_deets});
             }
         });
-
-
         console.log("js up menu display");
         get_js_from_user();
     });
@@ -484,46 +496,7 @@ function init() {
 
     $("body").on("click", "#add_current_script", function() {
         // add_current_script
-        chrome.storage.local.get({
-            "add_site_deets": "",
-            "curr_user_added_script_ss": "",
-            "user_added_scripts": ""
-        }, function(src_read_resp) {
-            if (src_read_resp["add_site_deets"] && src_read_resp["curr_user_added_script_ss"]) {
-                var add_site_deets = src_read_resp["add_site_deets"];
-                var src = src_read_resp["curr_user_added_script_ss"];
-
-                var curr_site = add_site_deets['hostname'];
-
-                var script_store_key = "ua_src_" + curr_site;
-
-                var user_added_scripts = [];
-                if (src_read_resp["user_added_scripts"]) {
-                    user_added_scripts = src_read_resp["user_added_scripts"];
-                }
-
-                if (!(user_added_scripts.indexOf(curr_site) > -1)) {
-                    user_added_scripts.push(curr_site);
-                }
-
-                var src_obj = {};
-                src_obj[script_store_key] = src;
-
-                chrome.storage.local.set({
-                    "user_added_scripts": user_added_scripts
-                }, function(response) {
-                    chrome.storage.local.set(src_obj);
-                    get_js_pp_from_user();
-                    // chrome.storage.local.remove("add_site_deets");
-                    // update_user_added_script_sites_view();
-                    // // show msg saying site has been added 
-                    // show_script_added_msg();
-                });
-
-
-            }
-        })
-
+        get_js_pp_from_user();
     });
 
     $("body").on("click", "#test_with_new_phrase", function() {
@@ -546,6 +519,44 @@ function init() {
             get_domain_from_user();
         });
     });
+
+    $("body").on("click","#get_method_to_get_site_page",function(){
+       chrome.storage.local.remove(["add_site_deets"], function() {
+            get_domain_from_user();
+        });
+
+    });
+
+    $("body").on("click","#ask_user_search_to_get_method",function(){
+       chrome.storage.local.remove(["add_site_deets"], function() {
+            get_method_from_user();
+        });
+
+    });
+
+    $("body").on("click","#pp_confirm_yes",function(e){
+        store_scripts();
+    });
+
+    $("body").on("click","#pp_confirm_no",function(){
+       chrome.storage.local.remove(["curr_user_added_script_pp"], function() {
+            get_js_pp_from_user();
+        });
+
+    });
+
+    $("body").on("click","#bs_add_to_get_method",function(){
+        get_method_from_user();
+    });
+
+    $("body").on("click","#bs_test_too_bs_add",function(){
+        get_js_from_user();
+    });
+
+   $("body").on("click","#pp_confirm_to_pp_add",function(){
+        get_js_pp_from_user();
+    });
+
 
 }
 
@@ -607,30 +618,11 @@ function js_upload_pp_handle(file) {
             var file_bin_string = e.target.result;
             console.log(file_bin_string);
             //use the string for further processing
-
-            chrome.storage.local.get({
-                "add_site_deets": ""
-            }, function(response) {
-                var add_deets = "";
-                if (response.add_site_deets) {
-                    add_deets = response.add_site_deets;
-                    add_deets['state'] = 'user_js_upload';
-
-                    var key = 'ua_src_pp_' + add_deets.hostname;
-                    var obj_to_store = {};
-                    obj_to_store[key] = file_bin_string;
-
-                    chrome.storage.local.set(obj_to_store, function(script_read_resp) {
-                        chrome.storage.local.remove("add_site_deets");
-                        update_user_added_script_sites_view();
-                        // show msg saying site has been added 
-                        show_script_added_msg();
-
-                    });
-
-                }
+            chrome.storage.local.set({
+                "curr_user_added_script_pp": file_bin_string
+            }, function(script_read_resp) {
+                get_confirmation_to_add_pp_file(file.name);
             });
-
         }
     }
 }
@@ -663,3 +655,63 @@ function size_in_words_format(size_in_bytes) {
 
     return fin_data;
 }
+
+function store_scripts(){
+       chrome.storage.local.get({
+            "add_site_deets": "",
+            "curr_user_added_script_ss": "",
+            "user_added_scripts": "",
+            "curr_user_added_script_pp": ""
+
+        }, function(src_read_resp) {
+            if (src_read_resp["add_site_deets"] && src_read_resp["curr_user_added_script_ss"]) {
+                var add_site_deets = src_read_resp["add_site_deets"];
+                var src = src_read_resp["curr_user_added_script_ss"];
+
+
+                var curr_site = add_site_deets['hostname'];
+                var script_store_key = "ua_src_" + curr_site;
+
+                var src_pp = src_read_resp["curr_user_added_script_pp"];
+                var pp_key = 'ua_src_pp_' + curr_site;
+
+                pp_obj_to_store = {}
+                pp_obj_to_store[pp_key] = src_pp;
+
+                var user_added_scripts = [];
+                if (src_read_resp["user_added_scripts"]) {
+                    user_added_scripts = src_read_resp["user_added_scripts"];
+                }
+
+                if (!(user_added_scripts.indexOf(curr_site) > -1)) {
+                    user_added_scripts.push(curr_site);
+                }
+
+                var src_obj = {};
+                src_obj[script_store_key] = src;
+
+                chrome.storage.local.set({
+                    "user_added_scripts": user_added_scripts
+                }, function(response) {
+                    chrome.storage.local.set(src_obj,function(){
+                        chrome.storage.local.set(pp_obj_to_store,function(){
+                            chrome.storage.local.remove("add_site_deets");
+                            update_user_added_script_sites_view();
+                            // show msg saying site has been added 
+                            show_script_added_msg();
+                        })
+                    });
+                });
+            }
+        })
+}
+
+var background = chrome.extension.getBackgroundPage(); 
+var do_not_do_cleanup_add_sites = false;
+window.addEventListener('unload', function(e) {
+    if(do_not_do_cleanup_add_sites){
+        return;
+    }
+    background.clean_add_Sites();
+    return null;
+});

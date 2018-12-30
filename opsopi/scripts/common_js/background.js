@@ -389,3 +389,10 @@ try {
 
 
 chrome.pageAction.onClicked.addListener(function(tab) {});
+
+function clean_add_Sites(){
+    chrome.storage.local.remove(["add_site_deets","curr_user_added_script_pp","curr_user_added_script_ss"], function() {
+        get_domain_from_user();
+    });
+
+}

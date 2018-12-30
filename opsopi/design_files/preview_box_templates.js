@@ -1,3 +1,5 @@
+var template_preview_box = 
+`
 <template id="loading_template">
     <div id="preview_root" style="max-width:150px;">
         <div class="pop-up center-content" style="background-color: white;">
@@ -73,3 +75,4 @@
 
     </div>
 </template>
+`

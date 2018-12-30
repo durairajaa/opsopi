@@ -496,6 +496,5 @@ function title_filter(product_page_title, search_result_title) {
             break;
         }
     }
-
     return first_half_ok && second_half_ok;
 }

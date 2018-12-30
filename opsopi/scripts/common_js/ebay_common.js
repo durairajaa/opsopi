@@ -28,12 +28,12 @@ function back_search_eb(prod_deets) {
     function extract_result(response) {
         var resp_elem_eb = $('<div/>').append($.parseHTML(response));
         var deets = {};
-        if (resp_elem_eb.find("li[listingId]").length > 0) {
-            var firstResult = resp_elem_eb.find("li[listingId]")[0];
+        if (resp_elem_eb.find("#srp-river-results .s-item").length > 0) {
+            var firstResult = resp_elem_eb.find("#srp-river-results .s-item")[0];
             try {
                 deets['prod_link'] = $(firstResult).find("a:eq(0)").attr("href");
                 deets['title'] = $(firstResult).find("h3").text().trim();
-                deets['prod_price'] = $($(firstResult).find("li.lvprice")[0]).text().trim().replace(/[$,]/g, "");
+                deets['prod_price'] = $($(firstResult).find(".s-item__price")[0]).text().trim().replace(/[$,]/g, "");
                 deets['website'] = 'ub';
                 deets['prod_site'] = 'ub';
                 deets['img_src'] = $($(firstResult).find("img")[0]).attr("src");
