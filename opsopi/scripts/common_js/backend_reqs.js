@@ -224,7 +224,7 @@ function back_search(prod_deets, website) {
     }
 }
 
-var back_search_sites = ['ub', 'wm', 'au', 'ta', 'ne', 'os', "bb", "co", "je", "be", "sb", "ab", "tk", "po", "ak"];
+var back_search_sites = ['ub', 'wm', 'au', 'ta', 'ne', 'os', "bb", "co", "je", "be", "sb", "ab", "tk", "po", "ak","ae"];
 
 function do_backsearch_and_get_results(prod_deets) {
     for (var i = 0; i < back_search_sites.length; i++) {

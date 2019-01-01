@@ -79,7 +79,8 @@ function getPageDeets() {
             prod_srch: getProdTitle(),
             product_id: getProductId(),
             prod_img: getProductImage(),
-            prod_site: "ae"
+            prod_site: "ae",
+            backsearch_site: true
         }
 
         return pageDeets;
@@ -90,7 +91,7 @@ function getPageDeets() {
 $(window).on("load", function() {
     if (isProductPage()) {
         console.log("calling update data for spa");
-        // update_data_for_spa(getPageDeets());
+        update_data_for_spa(getPageDeets());
         // console.log(getPageDeets());
         var deets = getPageDeets();
         console.log("%c Got Details", "color:red;");

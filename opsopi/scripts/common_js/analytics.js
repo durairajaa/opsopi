@@ -1,4 +1,4 @@
-var isDevUse = false;
+var isDevUse = true;
 
 if (!isDevUse) {
     console.log = function() {};
