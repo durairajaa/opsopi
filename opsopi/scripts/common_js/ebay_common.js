@@ -33,7 +33,13 @@ function back_search_eb(prod_deets) {
             try {
                 deets['prod_link'] = $(firstResult).find("a:eq(0)").attr("href");
                 deets['title'] = $(firstResult).find("h3").text().trim();
-                deets['prod_price'] = $($(firstResult).find(".s-item__price")[0]).text().trim().replace(/[$,]/g, "");
+                
+                if($(firstResult).find(".s-item__price").length>0){
+                    deets['prod_price'] = $($(firstResult).find(".s-item__price")[0]).text().trim().replace(/[$,]/g, "");    
+                }else if($(firstResult).find("#prcIsum").length>0){
+                    deets['prod_price'] = $($(firstResult).find("#prcIsum")[0]).text().trim().replace(/[$,]/g, "");
+                }
+                
                 deets['website'] = 'ub';
                 deets['prod_site'] = 'ub';
                 deets['img_src'] = $($(firstResult).find("img")[0]).attr("src");

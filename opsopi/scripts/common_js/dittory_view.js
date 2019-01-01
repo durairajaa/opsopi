@@ -207,9 +207,6 @@ function initialise_carousel_for_dittory() {
 
 
 function insert_dittory_results_to_page(result_box, result) {
-    if (!prod_disp_sent) {
-        prod_disp_sent = true;
-    }
 
     var results_list = [];
     var current_order = result["order"];

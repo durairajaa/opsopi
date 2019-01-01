@@ -9,7 +9,6 @@ function get_searches() {
             if (search_term != "") {
                 // send search event
                 console.log('ae', search_term);
-                sendsearchIntent('ae', search_term);
             }
         } catch (err) {
 

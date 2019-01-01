@@ -14,7 +14,6 @@ function get_searches() {
             if (search_term != "") {
                 // send search event
                 console.log('ta', search_term);
-                sendsearchIntent('ta', search_term);
             }
         } catch (err) {
 
@@ -28,7 +27,6 @@ function get_searches() {
             if (search_term != "") {
                 // send search event
                 console.log('ta', search_term);
-                sendsearchIntent('ta', search_term);
             }
         } catch (err) {
 

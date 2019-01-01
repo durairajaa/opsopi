@@ -34,8 +34,18 @@ function getPageDeets() {
     }
 
     function getProdPrice() {
-        var priceRaw = $(".prod-PriceHero .Price-group [itemprop='price']").attr('content');
-        var price = parseFloat(priceRaw.replace("$", "").replace(/[\s$,]/g, ''));
+        var priceRaw = ""
+        if($(".prod-PriceHero .Price-group [itemprop='price']").length>0){
+            priceRaw = $(".prod-PriceHero .Price-group [itemprop='price']").attr('content');    
+        }else if($(".prod-PriceHero [itemprop='price']").length>0){
+            priceRaw = $(".prod-PriceHero [itemprop='price']").attr('content');    
+        }
+        
+        var price = "";
+        if(priceRaw){
+            parseFloat(priceRaw.replace("$", "").replace(/[\s$,]/g, ''));
+        }
+        
         price = price ? price : "";
         return price;
     }

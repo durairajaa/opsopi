@@ -32,6 +32,9 @@ function back_search_wm(prod_deets) {
 
             try {
                 var resPrice = $(resp_elem_wm).find("#searchProductResult .Price-group").attr('aria-label');
+                if(!resPrice){
+                    resPrice = $(resp_elem_wm).find("#searchProductResult .price-group").attr('aria-label');
+                }
                 if (resPrice) {
                     resPrice = resPrice.replace(/[$,]/g, "");
                 }
@@ -40,7 +43,13 @@ function back_search_wm(prod_deets) {
                 deets['prod_price'] = resPrice;
                 deets['website'] = 'wm';
                 deets['prod_site'] = 'wm';
-                deets['img_src'] = $(resp_elem_wm).find("#searchProductResult .Tile-img").attr('src');
+
+                if($(resp_elem_wm).find("#searchProductResult .search-result-productimage").length>0){
+                    deets['img_src'] = $(resp_elem_wm).find("#searchProductResult .search-result-productimage img").attr('src');
+                }else if($(resp_elem_wm).find("#searchProductResult .Tile-img").length>0){
+                    deets['img_src'] = $(resp_elem_wm).find("#searchProductResult .Tile-img").attr('src');
+                }
+
                 deets['is_found'] = true;
             } catch (err) {
                 console.log(err);

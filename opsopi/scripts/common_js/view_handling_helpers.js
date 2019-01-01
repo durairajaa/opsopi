@@ -15,7 +15,6 @@ var price_results = [];
 var oos_results = [];
 var search_results = [];
 var exclusive_results = [];
-var graph_data = "";
 
 var is_dittory_prods = false;
 
@@ -24,7 +23,6 @@ var is_exclusive = false;
 var is_product_tracked = false;
 
 var view_results_first_time = true;
-var prod_disp_sent = false;
 
 var release_type = "";
 
@@ -46,7 +44,6 @@ function insert_main_container() {
     oos_results = [];
     search_results = [];
     exclusive_results = [];
-    graph_data = "";
 
     is_dittory_prods = false;
     is_exclusive = false;
@@ -524,10 +521,6 @@ function insert_price_result_box(result_box) {
         return;
     }
 
-    if (!prod_disp_sent) {
-        prod_disp_sent = true;
-    }
-
 
     if ($("#mc_main_host").css("display") == 'none') {
         console.log("in price result");
@@ -589,10 +582,7 @@ function insert_price_result_box(result_box) {
 
 function insert_manual_search_box(box) {
     // $(result_view).find("#results_container #manual_search").append(box);
-    // if(!prod_disp_sent){
-    //  // prod_disp_sent = true;
-    // }
-
+   
     $(result_view).find("#results_container #manual_search").append(box);
 
     if ($(mc_root).find("#preview_min_root #price").text() == "loading") {
@@ -614,10 +604,7 @@ function insert_manual_search_box(box) {
 }
 
 function insert_oos_box(box) {
-    if (!prod_disp_sent) {
-        prod_disp_sent = true;
-    }
-
+ 
     $(result_view).find("#results_container #oos").append(box);
     if (dock_settings == "top") {
         insert_to_carousel();
@@ -924,7 +911,6 @@ function hide_results_display_preview_min() {
 function update_data_for_spa(prod_deets_to_process) {
     prod_deets = _.clone(prod_deets_to_process);
     view_results_first_time = true;
-    prod_disp_sent = false;
     if (preview_box_template != "" && result_template != "" && main_template != "") {
 
         view_update = false;
@@ -932,7 +918,6 @@ function update_data_for_spa(prod_deets_to_process) {
         oos_results = [];
         search_results = [];
         exclusive_results = [];
-        graph_data = "";
 
         is_dittory_prods = false;
         is_exclusive = false;
@@ -940,15 +925,6 @@ function update_data_for_spa(prod_deets_to_process) {
         console.log("no need to import");
 
         $("#mc_main_host").remove();
-
-        //update main template
-        // $("body").append("<div style=\"position:fixed; left:0px; top:200px; z-index:9999;\" id=\"mc_host\"></div>");
-        // $("body").append("<div id=\"mc_main_host\" style=\"position:fixed; left:0px; top:200px; z-index:9999;\" > <div id=\"mc_host\" style=\"\" ></div> </div>");
-        // var host =  document.getElementById('mc_host');
-        // var container_dom = host.attachShadow({"mode":"open"});
-        // container_dom.appendChild(main_template.cloneNode(true));
-        // mc_root = container_dom.querySelector("#mc_root");
-        // result_view = container_dom.querySelector("#results_view_root");
 
         update_main_template();
 
@@ -1120,121 +1096,6 @@ function setevents() {
         this.scrollTop += (delta < 0 ? 1 : -1) * 30;
         e.preventDefault();
     });
-
-    $(result_view).on("click", ".result_link", function(e) {
-
-
-        console.log("result_link clicked")
-        var row_number = $(this).parent().index() + 1;
-        var link = $(this).attr('href');
-
-        if ($(this).parent().hasClass("price_result")) {
-            //price result click
-            var ga_obj = {};
-            ga_obj['row_number'] = row_number;
-            ga_obj['link'] = link;
-
-            if (is_dittory_prods) {
-
-                // if(is_dittory_category()){
-                //      if(isApparel()){
-                //          chrome.runtime.sendMessage({"method":"dittory_result_click","site":prod_deets.prod_site,"categ":"apparel","link":link});
-                //      }
-
-                //      if(isFootWear()){
-                //          chrome.runtime.sendMessage({"method":"dittory_result_click","site":prod_deets.prod_site,"categ":"footwear","link":link});
-                //      }
-
-                //      if(isWatch()){
-                //          chrome.runtime.sendMessage({"method":"dittory_result_click","site":prod_deets.prod_site,"categ":"watch","link":link});
-                //      }
-
-                // }
-                // else{
-                //      chrome.runtime.sendMessage({"method":"dittory_result_click","site":prod_deets.prod_site,"categ":"dittory","link":link});
-                // }
-
-                //   if(is_dittory_sub_categ()){
-                //   chrome.runtime.sendMessage({"method":"dittory_categ_dittorry_result_click","site":prod_deets.prod_site,"categ":"sub_categ","link":link});
-                //    }
-
-            } else {
-                // if(is_dittory_category()){
-                //              if(isApparel()){
-                //                  chrome.runtime.sendMessage({"method":"dittory_categ_click","site":prod_deets.prod_site,"categ":"apparel","link":link});
-                //              }
-
-                //              if(isFootWear()){
-                //                  chrome.runtime.sendMessage({"method":"dittory_categ_click","site":prod_deets.prod_site,"categ":"footwear","link":link});
-                //              }
-
-                //              if(isWatch()){
-                //                  chrome.runtime.sendMessage({"method":"dittory_categ_click","site":prod_deets.prod_site,"categ":"watch","link":link});
-                //              }
-
-                //         }
-
-                //        if(is_dittory_sub_categ()){
-                //              chrome.runtime.sendMessage({"method":"dittory_categ_makkhi_result_click","site":prod_deets.prod_site,"categ":"sub_categ","link":link});
-
-                //         }
-
-                // if(isBook()){
-                //       chrome.runtime.sendMessage({"method":"book_result_click","deets":prod_deets,"link":link});
-                //  }
-
-            }
-
-
-
-        }
-        if ($(this).parent().hasClass("oos_result")) {
-            //oos result click
-            console.log("OOS result clicked");
-            var ga_obj = {};
-            ga_obj['row_number'] = row_number;
-            ga_obj['link'] = link;
-
-            // if(is_dittory_category()){
-            //      if(isApparel()){
-            //          chrome.runtime.sendMessage({"method":"dittory_categ_click","site":prod_deets.prod_site,"categ":"apparel","link":link});
-            //      }
-
-            //      if(isFootWear()){
-            //          chrome.runtime.sendMessage({"method":"dittory_categ_click","site":prod_deets.prod_site,"categ":"footwear","link":link});
-            //      }
-
-            //      if(isWatch()){
-            //          chrome.runtime.sendMessage({"method":"dittory_categ_click","site":prod_deets.prod_site,"categ":"watch","link":link});
-            //      }
-
-            // }
-            // if(is_dittory_sub_categ()){
-            //      chrome.runtime.sendMessage({"method":"dittory_categ_makkhi_result_click","site":prod_deets.prod_site,"categ":"sub_categ","link":link});
-
-            // }
-
-            // if(isBook()){
-            //      chrome.runtime.sendMessage({"method":"book_result_click","deets":prod_deets,"link":link});
-            // }
-
-        }
-        if ($(this).parent().hasClass("manual_search_result")) {
-            //manual search clickk
-            console.log("Manual search clicked");
-            var ga_obj = {};
-            ga_obj['row_number'] = row_number;
-            ga_obj['link'] = link;
-
-        }
-
-
-        console.log("user clicked " + row_number + " " + link);
-
-
-
-    });
-
 
 
     $(result_view).find(".dropdown-menu #dock_main").click(function() {
@@ -1436,8 +1297,6 @@ function setevents() {
     });
 
     $(mc_root).on("mouseleave", "#preview_root", function(e) {
-        // $(mc_root).find("#preview_root").css("display","none");
-        // $(result_view).css("display","block");
         clearTimeout($(this).data('timeout'));
     });
 
@@ -1457,28 +1316,8 @@ function setevents() {
 
             ctabby_click = 'pvm_track_button_click';
         }
-        // console.log("calling hpmdr from pvmr click listener")
-        // hide_preview_min_display_results();
-
     });
 
-
-
-
-    //set preview mini box hover listener
-    // $(mc_root).on("mouseenter","#preview_min_root",function(e){
-    //    $(this).data('timeout', setTimeout(function () {
-    //      hide_preview_min_display_results();
-    //      //send makhibox view analytics
-    //     }, 1000));
-
-    // });
-
-    //  $(mc_root).on("mouseleave","#preview_min_root",function(e){
-    //  // $(mc_root).find("#preview_root").css("display","none");
-    //  // $(result_view).css("display","block");
-    //  clearTimeout($(this).data('timeout'));
-    // });
 
     //left arrow in results view
     $(mc_root).on("click", "#green_arrow", function(e) {
@@ -1490,29 +1329,15 @@ function setevents() {
 
 function insert_to_carousel(result) {
 
-    // var div = document.createElement('div');
-    // div.appendChild( result.cloneNode(true) )
-
-    // var result_html = div.innerHTML
-
-    // // var owl = $(result_view).find('.products .owl-carousel');
-    // owl.trigger('add.owl.carousel', 
-    //                  [jQuery('<div">' + result_html +
-    //                          '</div>')]).trigger('refresh.owl.carousel');
-    var carousel_html = $(result_view).find("#results_container #exclusive").html();
+     var carousel_html = $(result_view).find("#results_container #exclusive").html();
     carousel_html += $(result_view).find("#results_container #price_results").html();
     carousel_html += $(result_view).find("#results_container #oos").html();
     carousel_html += $(result_view).find("#results_container #manual_search").html();
 
     console.log('carousel_html log');
 
-    // console.log(carousel_html);
 
     owl.trigger('replace.owl.carousel', [jQuery($.trim(carousel_html))]).trigger('refresh.owl.carousel');
-
-    // owl.trigger('add.owl.carousel', 
-    //                  [jQuery('<div">' + result_html +
-    //                          '</div>')]).trigger('refresh.owl.carousel');
     owl.trigger("to.owl.carousel", [0]);
 
 
@@ -1647,15 +1472,6 @@ function update_view_data() {
     if (is_exclusive) {
         insert_exclusive_msg();
     }
-
-    // //call data load functions here
-    // if (checkDeetsComplete()) {
-    //  // getGraph();
-    //  checkUUID();
-    //  // game_categ_check();
-    // } else {
-    //  checkCassy();
-    // }    
 
     view_update = true;
 
@@ -2028,24 +1844,11 @@ function getmmpos() {
                 if (response.win_height == undefined || response.win_height == undefined) {
 
                     $(mc_root).find("#preview_min_root").css('left', '0px');
-                    // $(mc_root).find("#preview_min_root").css('top','230px');
-                    // $(mc_root).find("#preview_min_root").css('top',($(window).height()-150));
-                    // using $(window).height() returns document height in nordstrom rack
                     $(mc_root).find("#preview_min_root").css('top', (window.innerHeight - 150));
 
                 } else {
-                    // c_wh=$(window).height();
-                    // c_ww=$(window).width();   
                     c_wh = window.innerHeight;
                     c_ww = window.innerWidth;
-                    // console.log('c_wh:'+c_wh);
-                    // console.log('c_ww:'+c_ww)
-                    // console.log('heigh_ratio:'+Math.round((parseInt(response.pos_top)/parseInt(response.win_height))*parseInt(c_wh)));
-                    // console.log('left_ratio:'+Math.round((parseInt(response.pos_left)/parseInt(response.win_width))*parseInt(c_ww)));
-                    // console.log('pos_top'+response.pos_top);
-                    // console.log('pos_left'+response.pos_left);
-                    // console.log('wh:'+response.win_height);
-                    // console.log('ww:'+response.win_width);
                     top = Math.round((parseInt(response.pos_top) / parseInt(response.win_height)) * parseInt(c_wh));
                     left = Math.round((parseInt(response.pos_left) / parseInt(response.win_width)) * parseInt(c_ww));
 
@@ -2084,10 +1887,6 @@ function validateEmail(email) {
 
 
 function show_results_action_handler() {
-    // this may get called at all places 
-    // check for prodeets url (to confirm whether it is a product page)
-    //  if product page and url matches the current page get_data_and_display results
-    // else display toast notifying no results can be displayed 
     chrome.storage.local.get({
         auto_results_display: true
     }, function(response) {
@@ -2115,9 +1914,6 @@ function show_results_action_handler() {
 
 
 function check_user_settings_show_results() {
-    // this will get called only when product deets are ready and it is a product page
-    // check storage for settings
-
     if (prod_deets.backsearch_site) {
         // non apparel page do backsearch
         $(mc_root).find("#preview_root").css("display", "none");
@@ -2160,7 +1956,6 @@ function check_user_settings_show_results() {
 
             if (!backsearch_site) {
 
-                send_sd_match("");
                 $(mc_root).find("#preview_root").css("display", "none");
                 hide_preview_min_display_results = function(e) {
                     var img_src = prod_deets.prod_img;
