@@ -1,4 +1,12 @@
+var default_sites = ["www.amazon.com","www.bestbuy.com","www.costco.com","www.ebay.com","www.jet.com","www.newegg.com","www.overstock.com","www.target.com","www.walmart.com","www.abebooks.com","www.alibris.com","www.barnesandnoble.com","www.strandbooks.com","www.thriftbooks.com"];
+
+var url_params=window.location.search.replace('?','').split('&').reduce(function(s,c){var t=c.split('=');s[t[0]]=t[1];return s;},{});
+
 $(document).ready(function() {
+
+    if(url_params["hostname"]){
+
+    }
 
     $("body").on("click", ".remove_site", function() {
         console.log("in remove_site click process");
@@ -265,6 +273,22 @@ function populate_user_added_script_sites(user_added_sites) {
     }
 }
 
+function populate_default_site(){
+     var listing_template_main = document.querySelector("template#site_listing").content;
+
+    if (default_sites.length > 0) {
+        $("#default_site_list .no_sites_msg").hide();
+    }
+    for (var i = 0; i < default_sites.length; i++) {
+        var listing_template = listing_template_main.cloneNode(true);
+        // listing_template.querySelector("input").style.display = "none";
+        listing_template.querySelector("label").textContent = default_sites[i];
+        listing_template.querySelector(".contnent_div").setAttribute("title", default_sites[i]);
+
+        $(".default_site_listing_container .list").append(listing_template.cloneNode(true));
+    }
+}
+
 function update_user_added_sites_view() {
     chrome.storage.local.get({
         "user_added_sites": ""
@@ -308,6 +332,7 @@ function show_script_added_msg() {
 
 function init() {
 
+    populate_default_site();
 
     update_user_added_sites_view();
 
@@ -326,7 +351,10 @@ function init() {
             var link = document.createElement("a");
             link.href = url;
             console.log(link.hostname);
-
+            if(default_sites.indexOf(link.hostname)>-1){
+                $.toast("Site already present");
+                return;
+            }
             chrome.storage.local.get({
                 "add_site_deets": "",
                 "user_added_sites": "",
@@ -363,7 +391,7 @@ function init() {
 
 
                         if (host_name_exist) {
-                            $.toast(link.hostname + "is already added, pls remove it in the list below to add it again");
+                            $.toast(link.hostname + " is already added, pls remove it in the list below to add it again");
                             return;
                         } else {
                             chrome.storage.local.set({

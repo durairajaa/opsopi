@@ -218,7 +218,7 @@ var runtime_message_handler = function(message, sender, sendResponse) {
 
         });
 
-    } else if (message.method == "add_site_click") {
+    } else if (message.method == "request_site_click") {
         chrome.tabs.query({
             active: true,
             currentWindow: true
@@ -266,7 +266,15 @@ var runtime_message_handler = function(message, sender, sendResponse) {
         sendResponse({
             "isSuccess": true
         });
-    } else {
+    } else if(message.method == "add_site_click"){
+        if(message.hostname){
+            chrome.tabs.create({
+                "url":chrome.runtime.getURL("/add_sites/add_site.html")+"?hostname="+message.hostname,
+            });
+        }
+        
+
+    }else {
         sendResponse({});
     }
 
