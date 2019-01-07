@@ -9,6 +9,7 @@ $(document).ready(function() {
 	},function(response){
 		if(response.hostname){
 			var hostname = response.hostname;
+			var origin = response.origin;
 			console.log(response.hostname);
 			chrome.storage.local.get({"request_sent_sites":[]},function(storage_response){
 				console.log(storage_response);
@@ -50,6 +51,9 @@ $(document).ready(function() {
                 if (response.user_added_scripts && response.user_added_scripts.indexOf(hostname) > -1) {
                     host_name_exist = true;
                 }
+                if(hostname == "not_found"){
+                	host_name_exist = true;
+                }
 
                 if(host_name_exist){
                 	$("#request_sites").hide();
@@ -62,8 +66,8 @@ $(document).ready(function() {
 
 	$(document).on("click","#add_sites",function(e){
 		chrome.runtime.sendMessage({"method":"get_site_name"},function(response){
-			if(response.hostname){
-				chrome.runtime.sendMessage({"method":"add_site_click","hostname":response.hostname},function(response){
+			if(response.hostname && response.origin){
+				chrome.runtime.sendMessage({"method":"add_site_click","hostname":response.hostname,"origin":response.origin},function(response){
 
 				})
 			}

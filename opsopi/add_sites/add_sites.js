@@ -4,9 +4,7 @@ var url_params=window.location.search.replace('?','').split('&').reduce(function
 
 $(document).ready(function() {
 
-    if(url_params["hostname"]){
 
-    }
 
     $("body").on("click", ".remove_site", function() {
         console.log("in remove_site click process");
@@ -127,6 +125,11 @@ $(document).ready(function() {
 
 
     init();
+
+    if(url_params["origin"]){
+        $("#get_url_input").val(url_params["origin"]);
+    }
+    
 
     chrome.storage.local.get({
         "add_site_deets": ""

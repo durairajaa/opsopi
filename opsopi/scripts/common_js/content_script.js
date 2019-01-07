@@ -87,7 +87,8 @@ var url_params = window.location.search.replace('?', '').split('&').reduce(funct
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     if (message.method == "get_hostname") {
         sendResponse({
-            hostname: window.location.hostname
+            hostname: window.location.hostname,
+            origin: window.location.origin
         });
     }
 })

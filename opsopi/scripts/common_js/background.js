@@ -206,11 +206,13 @@ var runtime_message_handler = function(message, sender, sendResponse) {
             }, function(response) {
                 if (response && response.hostname) {
                     sendResponse({
-                        hostname: response.hostname
+                        hostname: response.hostname,
+                        origin: response.origin
                     })
                 } else {
                     sendResponse({
-                        hostname: "not_found"
+                        hostname: "not_found",
+                        origin: "not_found"
                     });
                 }
             })
@@ -269,7 +271,7 @@ var runtime_message_handler = function(message, sender, sendResponse) {
     } else if(message.method == "add_site_click"){
         if(message.hostname){
             chrome.tabs.create({
-                "url":chrome.runtime.getURL("/add_sites/add_site.html")+"?hostname="+message.hostname,
+                "url":chrome.runtime.getURL("/add_sites/add_site.html")+"?origin="+message.origin,
             });
         }
         
