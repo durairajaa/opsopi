@@ -195,7 +195,7 @@ This needs improvement as it fails often
 
 #### Requesting others to add site
 - Click on the opsopi icon on the browser bar
-- Click on "Add this site button"
+- Click on "Ask to add site" button
 - we will add this site and push an update (sites with most requests will be given priority)
 - people can track the number of requests to add sites on https://opsopi.appspot.com/
 

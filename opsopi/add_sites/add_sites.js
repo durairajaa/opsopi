@@ -139,6 +139,10 @@ $(document).ready(function() {
             $(".site_being_added").text(storage_response.add_site_deets.hostname + " ");
         } else {
             get_domain_from_user();
+
+            if(url_params.origin){
+                $("#get_url_input").val(url_params.origin);
+            }
         }
     });
 
