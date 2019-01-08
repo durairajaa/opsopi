@@ -1,16 +1,5 @@
 console.log("from sandbox js");
 
-      // window.addEventListener('message', function(event) {
-      //   var command = event.data.command;
-      //   var name = event.data.name || 'hello';
-      //   event.source.postMessage({
-      //   	"reply_message":name,
-      //   }, event.origin);
-
-      // });
-
-
-
 window.addEventListener("message",function(event){
 	console.log("received message");
 	console.log(event);

@@ -1,21 +1,21 @@
 # OPSOPI
 
-Opsopi is open source price comparision extension for google chrome, it helps to compare price of a product across many ecommerce websites.
-
-# How to use:
-
+Opsopi is an open source price comparison extension for google chrome, it helps to compare the price of a product across many e-commerce websites.
+  
+# How to use OPSOPI
 ### Find low prices without doing anything
-- Opsopi will popup on product pages
-- Click on the opsopi to see price of the product in other sites
+- OPSOPI will appear on product pages
+- Click on the OPSOPI to see price of the product in other sites
+- Click on a result to go to the product page on other sites
+![demo1](./demo.gif)
 
-![demo1](./opsopi_demo_img.png)
+### Extending OPSOPI
+Apart from the sites OPSOPI works by default, users can make it to work on whatever sites they want.
 
-![demo1](./opsopi_demo_img_1.png)
 
-
-### Adding more sites:
+  ### Adding more sites:
 Opsopi works on all major sites if you want to make opsopi to work on a site you can do by adding
-custom javascript to the extension
+custom javascript to the extension 
 
 ##### Adding new sites using Javascipt:
 
@@ -185,7 +185,6 @@ if(title && price && image_src){
 	fail_call_back();
 }
 ```
-
 #### Adding site without using javascript
 This needs improvement as it fails often
 - Click on the opsopi icon on the browser bar
@@ -200,4 +199,6 @@ This needs improvement as it fails often
 - we will add this site and push an update (sites with most requests will be given priority)
 - people can track the number of requests to add sites on https://opsopi.appspot.com/
 
-    
+### Helping OPSOPI
+- You can help opsopi by solving issues https://github.com/durairajaa/opsopi/issues
+- You can add more sites to opsopi

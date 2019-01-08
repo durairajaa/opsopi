@@ -6,31 +6,19 @@ var result_template = "";
 var preview_loading_template = "";
 var dittory_template = "";
 var preview_min_box = "";
-
 var dock_settings = "";
-
 var view_update = false;
-
 var price_results = [];
 var oos_results = [];
 var search_results = [];
 var exclusive_results = [];
-
 var is_dittory_prods = false;
-
 var is_exclusive = false;
-
 var is_product_tracked = false;
-
 var view_results_first_time = true;
-
 var release_type = "";
-
-
-
 var ctabby_click = "";
 var site_type = "";
-
 var id_deets = {};
 
 // logos
@@ -958,7 +946,6 @@ function update_data_for_spa(prod_deets_to_process) {
             initialize_carousel();
         }
 
-        // getDataAndDisplay(prod_deets);
         check_user_settings_show_results();
     } else {
         console.log("need to import");
@@ -1454,21 +1441,6 @@ function update_view_data() {
         initialize_carousel();
     }
 
-    if (is_dittory_prods == true) {
-        console.log("in dittory result");
-        $("#mc_main_host").css("display", "block");
-        $(result_view).find(".show_more_button_container button").text("See more results on Dittory website");
-        $(result_view).find(".show_more_button_container button").attr("title", "See more results on Dittory website");
-        $(result_view).find(".show_more_button_container").css("display", "block");
-        if (dock_settings == "top") {
-            initialise_carousel_for_dittory();
-        }
-        if (dock_settings == "bottom") {
-            initialise_carousel_for_dittory();
-        }
-
-    }
-
     if (is_exclusive) {
         insert_exclusive_msg();
     }
@@ -1494,12 +1466,7 @@ function update_view_data() {
             insert_manual_search_box(make_manual_search_box(search_results[i], '', false))
         }
 
-    } else {
-        for (var i = 0; i < price_results.length; i++) {
-            insertDittoryProduct(price_results[i]);
-        }
     }
-
     //displaying results
     hide_preview_display_results();
     $("#mc_main_host").css("display", "block");
@@ -1886,33 +1853,6 @@ function validateEmail(email) {
 }
 
 
-function show_results_action_handler() {
-    chrome.storage.local.get({
-        auto_results_display: true
-    }, function(response) {
-        if (response.auto_results_display) {
-            // do nothing
-            console.log('auto_results_display in settings might be invalid click');
-
-        } else {
-            if (prod_deets.results_request_sent) {
-                // toast
-                if (prod_deets.request_finished) {
-                    $.toast("Sorry,Could not get similar products");
-                }
-                // Sorry, could not find similar products
-                console.log('request already sent');
-                return;
-            } else {
-                $("#mc_main_host").css("display", "block");
-                prod_deets.results_request_sent = true;
-                getDataAndDisplay(prod_deets);
-            }
-        }
-    });
-}
-
-
 function check_user_settings_show_results() {
     if (prod_deets.backsearch_site) {
         // non apparel page do backsearch
@@ -1996,13 +1936,3 @@ function check_user_settings_show_results() {
     }
 }
 
-
-function get_data_and_display_results() {
-    if (prod_deets.results_request_sent) {
-        console.log('request already sent');
-        return;
-    } else {
-        prod_deets.results_request_sent = true;
-        getDataAndDisplay(prod_deets);
-    }
-}
