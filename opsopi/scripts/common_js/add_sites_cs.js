@@ -2509,7 +2509,7 @@ chrome.storage.local.get({
                     prod_categ: "",
                     prod_price: response.prod_price,
                     prod_link: window.location.href,
-                    prod_srch: title,
+                    prod_srch: response.title,
                     product_id: "",
                     prod_img: response.img_src,
                     prod_site: window.location.hostname
