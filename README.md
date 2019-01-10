@@ -4,6 +4,17 @@ Opsopi is an open source price comparison extension for google chrome, it helps 
   
 # How to use OPSOPI
 
+### Find low prices without doing anything
+- OPSOPI will appear on product pages
+- Click on the OPSOPI to see price of the product in other sites
+- Click on a result to go to the product page on other sites
+
+![demo1](./demo.gif)
+
+
+
+![demo2](./demo2.gif)
+
 OPSOPI works on the following sites by default
 - [amazon.com](https://www.amazon.com)
 - [bestbuy.com](https://www.bestbuy.com)
@@ -19,14 +30,6 @@ OPSOPI works on the following sites by default
 - [barnesandnoble.com](https://www.barnesandnoble.com/)
 - [strandbooks.com](https://www.strandbooks.com/)
 - [thriftbooks.com](https://www.thriftbooks.com/)
-
-
-### Find low prices without doing anything
-- OPSOPI will appear on product pages
-- Click on the OPSOPI to see price of the product in other sites
-- Click on a result to go to the product page on other sites
-![demo1](./demo.gif)
-![demo2](./demo2.gif)
 
 ### Extending OPSOPI
 Apart from the sites OPSOPI works by default, users can make it to work on whatever sites they want.

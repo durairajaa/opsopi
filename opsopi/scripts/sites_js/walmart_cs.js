@@ -1,18 +1,12 @@
-console.log("walmart cs reloaded");
-
 function isProductPage() {
-    console.log("in bc cs ");
     if (window.location.href.match("/ip/")) {
-        console.log("product page");
         return true;
     } else {
-        console.log("not a product page");
         return false;
     }
 }
 
 function getPageDeets() {
-
     function getProdTitle() {
         var title = $(".prod-ProductTitle").text();
         title = title ? title : "";
@@ -35,17 +29,15 @@ function getPageDeets() {
 
     function getProdPrice() {
         var priceRaw = ""
-        if($(".prod-PriceHero .Price-group [itemprop='price']").length>0){
-            priceRaw = $(".prod-PriceHero .Price-group [itemprop='price']").attr('content');    
-        }else if($(".prod-PriceHero [itemprop='price']").length>0){
-            priceRaw = $(".prod-PriceHero [itemprop='price']").attr('content');    
+        if ($(".prod-PriceHero .Price-group [itemprop='price']").length > 0) {
+            priceRaw = $(".prod-PriceHero .Price-group [itemprop='price']").attr('content');
+        } else if ($(".prod-PriceHero [itemprop='price']").length > 0) {
+            priceRaw = $(".prod-PriceHero [itemprop='price']").attr('content');
         }
-        
         var price = "";
-        if(priceRaw){
+        if (priceRaw) {
             parseFloat(priceRaw.replace("$", "").replace(/[\s$,]/g, ''));
         }
-        
         price = price ? price : "";
         return price;
     }
@@ -79,19 +71,12 @@ function getPageDeets() {
             is_oos: getOOSstate(),
             backsearch_site: true
         }
-
         return pageDeets;
     }
     return getDeets();
 }
-
-$(window).on("load", function() {
+$(window).on("load", function () {
     if (isProductPage()) {
-        console.log("calling update data for spa");
         update_data_for_spa(getPageDeets());
-        console.log(getPageDeets());
-        // var deets = getPageDeets();
-        // console.log("%c Got Details","color:red;");
-        // console.log(deets);
     }
 });

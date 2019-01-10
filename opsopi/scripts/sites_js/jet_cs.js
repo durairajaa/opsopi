@@ -3,17 +3,11 @@ var page_url_check_timer = "";
 var page_old_url = window.location.href;
 var old_title = "";
 
-
 function page_load_checker() {
-
     if (page_load_check_timer) {
         window.clearTimeout(page_load_check_timer);
     }
-
     if ($("h1").length == 0 || ($("h1").length != 0 && old_title == $("h1").text())) {
-        //page still loading
-        console.log(old_title);
-        console.log($("h1").text());
         page_load_check_timer = setTimeout(page_load_checker, 1000);
         return;
     } else {
@@ -23,13 +17,9 @@ function page_load_checker() {
 }
 
 function page_task() {
-    //check for product page
     if (window.location.href.match('/product/')) {
-        // get data and insert deets
         update_data_for_spa(getPageDeets());
-
     } else {
-        // do nothing here
         old_title = "";
     }
 }
@@ -39,7 +29,6 @@ function page_url_change_checker() {
         window.clearTimeout(page_url_check_timer);
     }
     if (page_old_url != window.location.href) {
-        //url change detected
         page_old_url = window.location.href;
         page_url_check_timer = setTimeout(page_url_change_checker, 1000);
         $("#mc_main_host").remove();
@@ -50,18 +39,14 @@ function page_url_change_checker() {
     }
 }
 
-
 function getPageDeets() {
-
     function getProdTitle() {
-        // var title = $.trim($("#product h1").contents().filter(function(){return this.nodeType==3;})[0].textContent);
         var title = $("h1").text();
         title = title ? title : "";
         return title;
     }
 
     function getCategoryFromCrumbs() {
-        // no categ informaaation available
         var breadcrumb_list = $(".breadcrumb li a");
         var crumbs = ""
         for (i = 0; i < breadcrumb_list.length; i++) {
@@ -86,7 +71,6 @@ function getPageDeets() {
     }
 
     function getProductId() {
-        console.log("getting pid for jet");
         var pid = $("[id='input-article']").attr('value');
         if (!pid) {
             pid = $("#pdv [data-sku]:eq(0)").attr('data-sku');
@@ -120,12 +104,10 @@ function getPageDeets() {
             is_oos: getOOSstate(),
             backsearch_site: true
         }
-
         return pageDeets;
     }
     return getDeets();
 }
-
 if (window.location.href.match('jet.com')) {
     page_load_checker();
     page_url_change_checker();

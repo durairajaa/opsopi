@@ -54,7 +54,6 @@
 		    "js": [
 				"scripts/vendor_js/jquery-3.1.1.min.js",
 				"scripts/vendor_js/jquery-ui.min.js",
-				"scripts/vendor_js/optimal-select.min.js",
 				"scripts/vendor_js/owl.carousel.min.js",
 				"scripts/vendor_js/jquery.toast.min.js",
 				"scripts/vendor_js/lodash.min.js",

@@ -1,18 +1,12 @@
-console.log("bestbuy cs reloaded");
-
 function isProductPage() {
-    console.log("in bc cs ");
     if ($("#pdp-content").length > 0) {
-        console.log("product page");
         return true;
     } else {
-        console.log("not a product page");
         return false;
     }
 }
 
 function getPageDeets() {
-
     function getProdTitle() {
         var title = $("#sku-title").text();
         if (!title) {
@@ -58,7 +52,6 @@ function getPageDeets() {
         return false;
     }
 
-
     function getDeets() {
         var pageDeets = {
             prod_title: getProdTitle(),
@@ -73,19 +66,12 @@ function getPageDeets() {
             is_oos: getOOSstate(),
             backsearch_site: true
         }
-
         return pageDeets;
     }
     return getDeets();
 }
-
-$(window).on("load", function() {
+$(window).on("load", function () {
     if (isProductPage()) {
-        console.log("calling update data for spa");
         update_data_for_spa(getPageDeets());
-        console.log(getPageDeets());
-        // var deets = getPageDeets();
-        // console.log("%c Got Details","color:red;");
-        // console.log(deets);
     }
 });

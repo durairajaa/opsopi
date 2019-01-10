@@ -1,16 +1,11 @@
-console.log("alibris cs reloaded");
-
 function isProductPage() {
-    console.log("in ab cs ");
     if ($("#bookSearchRed").length > 0) {
-        //book page
         return true;
     }
     return false;
 }
 
 function getPageDeets() {
-
     function getProdTitle() {
         var title = $.trim($(".product-title h1[itemprop='name']").text());
         title = title ? title : "";
@@ -20,18 +15,8 @@ function getPageDeets() {
     function getCategoryFromCrumbs() {
         var breadcrumb_list = $(".a-breadcrumb li a");
         var crumbs = ""
-        // for(i=0; i<breadcrumb_list.length;i++){
-        // 	crumbs += $.trim($(breadcrumb_list[i]).text());
-        // 	crumbs += "_";
-        // }
-        // if(crumbs){
-        // 	crumbs = crumbs.slice(0,-1);
-        // }
-        // crumbs = crumbs?crumbs:"";
         return crumbs;
     }
-
-
 
     function getProdPrice() {
         var price = "";
@@ -45,20 +30,16 @@ function getPageDeets() {
     }
 
     function getProductId() {
-
         var product_id = "";
-
         if ($("[itemprop='isbn']").length > 1) {
             product_id = $("[itemprop='isbn']:eq(1)").text();
             product_id = product_id.replace("-", "");
         }
-
         if (!product_id) {
             if ($(".isbn-link:eq(0)").length > 0) {
                 product_id = $(".isbn-link:eq(0)").text();
             }
         }
-
         var pid = "";
         if (product_id) {
             pid = product_id;
@@ -78,8 +59,6 @@ function getPageDeets() {
         return false;
     }
 
-
-
     function getISbn() {
         var isbn_text = "";
         if ($("[itemprop='isbn']").length > 1) {
@@ -97,7 +76,6 @@ function getPageDeets() {
         return "";
     }
 
-
     function getDeets() {
         var pageDeets = {
             prod_title: getProdTitle(),
@@ -112,21 +90,14 @@ function getPageDeets() {
             is_oos: getOOSstate(),
             backsearch_site: true,
         }
-
         if (getISbn()) {
             pageDeets['book_page'] = true;
             pageDeets['prod_srch'] = getISbn();
         }
-
         return pageDeets;
     }
     return getDeets();
 }
 if (isProductPage()) {
-    console.log("calling update data for spa");
     update_data_for_spa(getPageDeets());
-    console.log(getPageDeets());
-    // var deets = getPageDeets();
-    // console.log("%c Got Details","color:red;");
-    // console.log(deets);
 }

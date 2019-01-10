@@ -1,5 +1,4 @@
 function back_search_sb(prod_deets) {
-    console.log(prod_deets);
 
     var search_term = prod_deets.prod_title;
 
@@ -15,12 +14,10 @@ function back_search_sb(prod_deets) {
     });
     dyn_req.done(function(response) {
         var extracted_deets = extract_result(response);
-        console.log(extracted_deets);
         if (extracted_deets.is_found && title_filter(prod_deets.prod_title, extracted_deets.title)) {
             insert_price_result_box(make_results_box(extracted_deets, 'searchid', false));
         } else {
             // nothing found
-            console.log("nothing found for nb");
             // insert manual search
             insert_manual_search_box(make_manual_search_box({
                 "prod_site": "sb",
@@ -39,7 +36,6 @@ function back_search_sb(prod_deets) {
 
         if (resp_elem_wm.find(".product-summary").length > 0) {
 
-            console.log("strand books found");
 
             var results = resp_elem_wm.find(".product-summary:eq(0)");
             var firstResult = results[0];
@@ -55,21 +51,14 @@ function back_search_sb(prod_deets) {
 
                 deets['is_found'] = true;
             } catch (err) {
-                console.log("sb failed");
                 console.log(err);
                 deets['is_found'] = false;
-                console.log("setting is_found false");
             }
         }
 
         if (!(deets['prod_link'] && deets['title'] && deets['prod_price'] && deets['website'])) {
-            console.log("setting is_found false");
             deets['is_found'] = false;
-        } else {
-            console.log("bn failed");
         }
-        console.log(deets);
-        console.log(_.clone(deets));
         return _.clone(deets);
     }
 }

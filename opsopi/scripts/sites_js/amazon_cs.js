@@ -1,26 +1,17 @@
-console.log("amazon cs reloaded");
-
 function isProductPage() {
-    console.log("in bc cs ");
     if (window.location.href.match("/dp/") || window.location.href.match("/gp/product/")) {
-        console.log("product page");
         return true;
     } else {
-        console.log("not a product page");
         return false;
     }
 }
 
 function getPageDeets() {
-
     function getProdTitle() {
         var title = $.trim($("#productTitle").text());
-
         if (!title) {
             title = $("#ebooksProductTitle").text();
         }
-
-
         title = title ? title : "";
         return title;
     }
@@ -45,26 +36,20 @@ function getPageDeets() {
         if (!price) {
             price = ($("#dp-container #centerCol .swatchElement.selected .a-color-price").text()).replace(/[\s$,]/g, '');
         }
-
         if (!price) {
             price = ($(".header-price.a-color-price").text()).replace(/[\s$,]/g, '');
         }
-
         if (!price) {
             price = $("#priceblock_saleprice").text().replace(/[\s$,]/g, '');
         }
-
         if (!price) {
             if ($(".kindle-price .a-color-price").length > 0) {
                 price = $(".kindle-price .a-color-price").text().replace(/[\s$,]/g, '');
             }
-
         }
-
         if (price.match('-')) {
             price = price.split('-')[0]
         }
-
         price = parseFloat(price);
         price = price ? price : "";
         return price;
@@ -88,7 +73,6 @@ function getPageDeets() {
             id_val = '';
         }
         product_id = id_val;
-
         if (window.location.href.match(/dp\/(.+)\/ref/)) {
             az_pid_match_group = window.location.href.match(/dp\/(.+)\/ref/);
         } else if (window.location.href.match(/dp\/(.+)\/\?/)) {
@@ -172,10 +156,5 @@ function getPageDeets() {
     return getDeets();
 }
 if (isProductPage()) {
-    console.log("calling update data for spa");
     update_data_for_spa(getPageDeets());
-    console.log(getPageDeets());
-    // var deets = getPageDeets();
-    // console.log("%c Got Details","color:red;");
-    // console.log(deets);
 }

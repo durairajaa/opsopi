@@ -1,12 +1,7 @@
-console.log("ebay cs reloaded");
-
 function isProductPage() {
-    console.log("in ub cs ");
     if (($('#Body[itemtype="http://schema.org/Product"]').length > 0) || ($('#Body[itemtype="https://schema.org/Product"]').length > 0)) {
-        console.log("product page");
         return true;
     } else {
-        console.log("not a product page");
         return false;
     }
 }
@@ -28,45 +23,31 @@ function getPageDeets() {
 
     function tittlyFind(contents_arr, parse_type) {
         var tittly_val = '';
-        //nodetype only fetches textnode
-        $.each(contents_arr, function() {
+        $.each(contents_arr, function () {
             if ((this.nodeType === 3) && $.trim($(this).text()) != '') {
                 tittly_val += ' ' + $.trim($(this).text());
-            } //ifloop
-        }); // eachFunction
-
+            }
+        });
         return tittly_val;
-
-    } // tittlyFind
+    }
 
     function textFind(contents_arr, parse_type) {
         var price_val = '';
-        //nodetype only fetches textnode
-        $.each(contents_arr, function() {
+        $.each(contents_arr, function () {
             if ((this.nodeType === 3) && $.trim($(this).text()) != '') {
                 price_val += ' ' + $.trim($(this).text());
-            } //ifloop
-        }); // eachFunction
-
+            }
+        });
         return cleanPrice(price_val, parse_type);
-
-    } // textFind
-
+    }
 
     function cleanPrice(in_str, parse_type) {
-
         if (in_str == undefined || in_str == '') {
-            console.log('whoa price is bare naked!');
             return '';
         }
-
         parse_type = typeof parse_type !== 'undefined' ? parse_type : 0;
-
-        //console.log('PARSE_TYPE IS: '+parse_type);
-
         var clean_price_str = $.trim(in_str.replace(/us\.*|\*|\,|\:/gi, ''));
         clean_price_str = clean_price_str.replace(/[$]/g, "");
-
         if (parse_type == 0) {
             clean_price_str = clean_price_str.split(/\s+/g)[0];
         } else if (parse_type == -1) {
@@ -74,23 +55,16 @@ function getPageDeets() {
         } else {
             clean_price_str = clean_price_str.split(/\s+/g)[parse_type];
         }
-
-
         if (isNaN(parseFloat(clean_price_str))) {
-            //if the string is still notafloatthengocharbychar
-            return clean_price_str.split("").filter(function(each) {
+            return clean_price_str.split("").filter(function (each) {
                 if (!isNaN(each) || (each == '.')) {
                     return each;
-                } //if
-            }).join(''); //func                                                                           
-
-        } //if
-        else {
+                }
+            }).join('');
+        } else {
             return clean_price_str;
         }
-
-
-    } //cleanPrice
+    }
 
     function getProdTitle() {
         var title = $.trim(tittlyFind($(cssLocs.eb.title).contents()));
@@ -154,18 +128,10 @@ function getPageDeets() {
             is_oos: getOOSstate(),
             backsearch_site: true
         }
-
         return pageDeets;
     }
     return getDeets();
 }
-
-
 if (isProductPage()) {
-    console.log("calling update data for spa");
     update_data_for_spa(getPageDeets());
-    console.log(getPageDeets());
-    // var deets = getPageDeets();
-    // console.log("%c Got Details","color:red;");
-    // console.log(deets);
 }

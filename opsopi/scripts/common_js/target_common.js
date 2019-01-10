@@ -1,5 +1,4 @@
 function back_search_ta(prod_deets) {
-    console.log(prod_deets);
     var searchURL = "http://redsky.target.com/v1/plp/search?kwr=y&keyword=" + encodeURIComponent(prod_deets.prod_title);
     var dyn_req = backPostGet({
         type: "GET",
@@ -9,16 +8,11 @@ function back_search_ta(prod_deets) {
             "Accept": "application/json, text/javascript, */*; q=0.01"
         }
     });
-    dyn_req.done(function(response) {
+    dyn_req.done(function (response) {
         var extracted_deets = extract_result(response);
-        console.log(extracted_deets);
         if (extracted_deets.is_found && title_filter(prod_deets.prod_title, extracted_deets.title)) {
             insert_price_result_box(make_results_box(extracted_deets, 'searchid', false));
         } else {
-            // nothing found
-            console.log("nothing found for target");
-            console.log(extracted_deets.is_found , title_filter(prod_deets.prod_title, extracted_deets.title));
-            // insert manual search
             insert_manual_search_box(make_manual_search_box({
                 "prod_site": "ta",
                 "prod_link": "https://www.target.com/s?searchTerm=" + encodeURIComponent(prod_deets.prod_title),
@@ -27,7 +21,6 @@ function back_search_ta(prod_deets) {
                 "img_src": prod_deets.prod_img
             }, "searchid"));
         }
-
     })
 
     function extract_result(response) {
@@ -58,18 +51,11 @@ function back_search_ta(prod_deets) {
                 deets['is_found'] = true;
             } catch (err) {
                 deets['is_found'] = false;
-                console.log("setting is_found false");
             }
-
         }
         if (!(deets['prod_link'] && deets['title'] && deets['prod_price'] && deets['website'])) {
-            console.log("setting is_found false");
             deets['is_found'] = false;
         }
-        console.log(deets);
-        console.log(_.clone(deets));
         return _.clone(deets);
     }
 }
-
-

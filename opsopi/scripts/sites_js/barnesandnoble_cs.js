@@ -1,16 +1,11 @@
-console.log("barnesandnoble cs reloaded");
-
 function isProductPage() {
-    console.log("in bc cs ");
     if (window.location.href.indexOf("/w/") > -1) {
-        //book page
         return true;
     }
     return false;
 }
 
 function getPageDeets() {
-
     function getProdTitle() {
         var title = $.trim($(".pdp-header-title").text());
         title = title ? title : "";
@@ -20,14 +15,6 @@ function getPageDeets() {
     function getCategoryFromCrumbs() {
         var breadcrumb_list = $(".a-breadcrumb li a");
         var crumbs = ""
-        // for(i=0; i<breadcrumb_list.length;i++){
-        // 	crumbs += $.trim($(breadcrumb_list[i]).text());
-        // 	crumbs += "_";
-        // }
-        // if(crumbs){
-        // 	crumbs = crumbs.slice(0,-1);
-        // }
-        // crumbs = crumbs?crumbs:"";
         return crumbs;
     }
 
@@ -43,14 +30,11 @@ function getPageDeets() {
     }
 
     function getProductId() {
-
         var product_id = "";
-
         if ($("#ProductDetailsTab th:contains('ISBN-13') + td").length > 0) {
             product_id = $("#ProductDetailsTab th:contains('ISBN-13') + td").text()
             product_id = product_id.replace("-", "");
         }
-
         var pid = "";
         if (product_id) {
             pid = product_id;
@@ -93,10 +77,5 @@ function getPageDeets() {
     return getDeets();
 }
 if (isProductPage()) {
-    console.log("calling update data for spa");
     update_data_for_spa(getPageDeets());
-    console.log(getPageDeets());
-    // var deets = getPageDeets();
-    // console.log("%c Got Details","color:red;");
-    // console.log(deets);
 }

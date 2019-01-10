@@ -20,41 +20,32 @@ var release_type = "";
 var ctabby_click = "";
 var site_type = "";
 var id_deets = {};
-
-// logos
 var housefly = chrome.extension.getURL('design_files/resources/images/logo.png');
 var closebox = chrome.extension.getURL('design_files//resources/images/close_box.png');
 
 function insert_main_container() {
-
     view_update = false;
     price_results = [];
     oos_results = [];
     search_results = [];
     exclusive_results = [];
-
     is_dittory_prods = false;
     is_exclusive = false;
-
     chrome.storage.local.get({
         "dock_settings": ""
-    }, function(response) {
+    }, function (response) {
         if (response.dock_settings != "") {
-
             if (response.dock_settings[prod_deets.prod_site]) {
-                //settings available
                 dock_settings = response.dock_settings[prod_deets.prod_site];
                 load_template();
             } else {
-                //make settings
                 var d_settings = response.dock_settings;
                 d_settings[prod_deets.prod_site] = "left"
                 chrome.storage.local.set({
                     "dock_settings": d_settings
-                }, function(set_response) {
+                }, function (set_response) {
                     dock_settings = "left";
                     load_template();
-
                 });
             }
         } else {
@@ -62,17 +53,12 @@ function insert_main_container() {
             d_settings[prod_deets.prod_site] = "left"
             chrome.storage.local.set({
                 "dock_settings": d_settings
-            }, function(set_response) {
+            }, function (set_response) {
                 dock_settings = "left";
                 load_template();
-
             });
-
         }
-
     });
-
-
 
     function load_template() {
         var content = $("<div/>").append(template_main_container)[0];
@@ -81,64 +67,41 @@ function insert_main_container() {
         insert_preview_box();
     }
 
-
     function do_post_template_load_task(main_temlpate_content) {
-
-        console.log("got content");
         all_container_templates = main_temlpate_content.cloneNode(true);
         if (dock_settings == "top") {
             $("body").append("<div id=\"mc_main_host\" style=\"position:fixed; left:0px; top:200px; z-index:9999;\" > <div id=\"mc_host\" style=\"\" ></div> </div>");
             var host = document.getElementById('mc_host');
-
             main_template = main_temlpate_content.querySelector('template#main_template_dock_top').content;
             main_template.querySelector("#owl_css_style").href = chrome.extension.getURL('design_files/css/owl.carousel.min.css');
             main_template.querySelector(".owl_css_style").textContent = "@import \"" + chrome.extension.getURL('design_files/css/owl.carousel.min.css'); + "\"";
-            //graph insert_exclusive_msg
-
-
         }
         if (dock_settings == "left") {
             $("body").append("<div id=\"mc_main_host\" style=\"position:fixed; left:0px; top:200px; z-index:99999999999999;\" > <div id=\"mc_host\" style=\"\" ></div> </div>");
             var host = document.getElementById('mc_host');
-
             main_template = main_temlpate_content.querySelector('template#main_template_dock_left').content;
-
         }
-
         if (dock_settings == "right") {
-
             $("body").append("<div id=\"mc_main_host\" style=\"position:fixed; right:0px; top:200px; z-index:9999;\" > <div id=\"mc_host\" style=\"\" ></div> </div>");
             var host = document.getElementById('mc_host');
-
             main_template = main_temlpate_content.querySelector('template#main_template_dock_left').content;
-
         }
-
         if (dock_settings == "bottom") {
             $("body").append("<div id=\"mc_main_host\" style=\"position:fixed; left:0px; bottom:200px; z-index:9999;\" > <div id=\"mc_host\" style=\"\" ></div> </div>");
             var host = document.getElementById('mc_host');
-
             main_template = main_temlpate_content.querySelector('template#main_template_dock_bot').content;
             main_template.querySelector("#owl_css_style").href = chrome.extension.getURL('design_files/css/owl.carousel.min.css');
             main_template.querySelector(".owl_css_style").textContent = "@import \"" + chrome.extension.getURL('design_files/css/owl.carousel.min.css'); + "\"";
-
         }
-
-
         var dock_icon_0 = chrome.extension.getURL('design_files/resources/images/icons0.png');
         var dock_icon_1 = chrome.extension.getURL('design_files/resources/images/icons1.png');
         var dock_icon_2 = chrome.extension.getURL('design_files/resources/images/icons2.png');
         var dock_icon_3 = chrome.extension.getURL('design_files/resources/images/icons3.png');
         var dock_icon_4 = chrome.extension.getURL('design_files/resources/images/icon4.png');
-
-
-
         main_template.querySelector("#fa_style").href = chrome.extension.getURL('design_files/css/font-awesome.min.css');
         main_template.querySelector("#main_css_style").href = chrome.extension.getURL('design_files/css/popup.css');
-
         main_template.querySelector(".main_css_style").textContent = "@import \"" + chrome.extension.getURL('design_files/css/popup.css') + "\"";
         main_template.querySelector(".fa_style").textContent = "@import \"" + chrome.extension.getURL('design_files/css/font-awesome.min.css') + "\"";
-
         main_template.querySelector("#green_arrow img").src = chrome.extension.getURL('design_files/resources/images/arrow-green.png');
         main_template.querySelector("#dock_main img").src = dock_icon_0;
         main_template.querySelector("#dock_row_1 img").src = dock_icon_0;
@@ -146,30 +109,24 @@ function insert_main_container() {
         main_template.querySelector("#dock_row_3 img").src = dock_icon_2;
         main_template.querySelector("#dock_row_4 img").src = dock_icon_3;
         main_template.querySelector("#dock_row_5 img").src = dock_icon_4;
-
-
-
         var fa = document.createElement('style');
         fa.type = 'text/css';
         fa.textContent = '@font-face { font-family: FontAwesome; src: url("' +
             chrome.extension.getURL('design_files/fonts/fontawesome-webfont.woff') +
             '"); }';
         $('head').append(fa);
-
         var bp = document.createElement('style');
         bp.type = 'text/css';
         bp.textContent = '@font-face { font-family: baloo; src: url("' +
             chrome.extension.getURL('design_files/fonts/BalooPaaji-Regular.ttf') +
             '"); }';
         $('head').append(bp);
-
         var bp = document.createElement('style');
         bp.type = 'text/css';
         bp.textContent = '@font-face { font-family: baloo; src: url("' +
             chrome.extension.getURL('design_files/fonts/BalooPaaji-Regular.ttf') +
             '"); }';
         $('head').append(bp);
-
         la_tag = "<style>\
             @font-face {\
               font-family: 'Lato';\
@@ -186,9 +143,7 @@ function insert_main_container() {
               unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;\
             }\
          </style>";
-
         $("head").append(la_tag);
-
         la_tag = "<style id='la_tag'>\
             @font-face {\
               font-family: 'mc_lato';\
@@ -205,23 +160,13 @@ function insert_main_container() {
               unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;\
             }\
          </style>";
-
         $("head").append(la_tag);
-
-
-        //in a_b test change the following to none
         $("#mc_main_host").css("display", "none");
-        // $("#mc_main_host").css("display","block");
-
-        // var container_dom = host.createShadowRoot({"mode":"open"});
-
         if (shadow_dom_support == "v1") {
-            //attachShadow
             var container_dom = host.attachShadow({
                 "mode": "open"
             });
         } else if (shadow_dom_support == "v0") {
-            // createShadowRoot
             var container_dom = host.createShadowRoot({
                 "mode": "open"
             });
@@ -229,79 +174,48 @@ function insert_main_container() {
         container_dom.appendChild(main_template.cloneNode(true));
         mc_root = container_dom.querySelector("#mc_root");
         result_view = container_dom.querySelector("#results_view_root");
-
         if (dock_settings == "top") {
             initialize_carousel();
         }
-
         if (dock_settings == "bottom") {
             initialize_carousel();
         }
-
-
-        console.log("before right check")
         if (dock_settings == "right") {
-            console.log("setting transform to arrow");
             $(result_view).find("#green_arrow img").css("transform", "rotate(180deg)");
-        } else {
-            console.log("not setting transform to arrow");
-            console.log(dock_settings);
-        }
+        } else {}
     }
 }
 
-
 function insert_preview_box() {
-
     var content = $("<div/>").append(template_preview_box)[0];
     do_post_template_load_task(content);
     make_preview_draggable();
     make_results_template();
 
-
-
     function do_post_template_load_task(main_temlpate_content) {
-        console.log(main_temlpate_content);
         preview_loading_template = main_temlpate_content.querySelector('template#loading_template').content;
-
         var loading_template = preview_loading_template.cloneNode(true);
         loading_template.querySelector("#pv_makkhi_logo img").src = chrome.extension.getURL('design_files/resources/images/logo.png');
         loading_template.querySelector("#pv_prod_image img").src = prod_deets.prod_img;
         loading_template.querySelector("#pv_load_image img").src = chrome.extension.getURL('design_files/resources/images/spinner.png');
-
-        //inserting into page
         var preview_root = $(loading_template).insertBefore(result_view);
-
-        //making preview template global
         preview_box_template = main_temlpate_content.querySelector('template#price_update_template').content;
-
-
-        //updating preview min box
         preview_min_box = main_temlpate_content.querySelector('template#preview_mini_box').content;
         loading_template = preview_min_box.cloneNode(true);
         loading_template.querySelector("#pv_makkhi_logo img").src = chrome.extension.getURL('design_files/resources/images/logo.png');
         loading_template.querySelector("#pv_popup_close img").src = chrome.extension.getURL('design_files/resources/images/popup-close.png');
         loading_template.querySelector("#price").textContent = "loading";
-        //inserting into page
         var preview_min_root = $(loading_template).insertBefore(result_view);
-
-
     }
-
 }
-
 
 function make_preview_box(price, image) {
     var preview_box = preview_box_template.cloneNode(true);
-    console.log(preview_box);
     preview_box.querySelector("#pv_makkhi_logo img").src = chrome.extension.getURL('design_files/resources/images/logo.png');
     preview_box.querySelector("#pv_prod_image img").src = image
-
-
     if (!isNaN(price)) {
         preview_box.querySelector("#pv_prod_price").textContent = '$' + price;
         if (price < prod_deets.prod_price) {
-            // preview_box.querySelector("#pv_prod_price").classList.add("green-text");
             preview_box.querySelector("#pv_prod_price").style.color = "#8fc952";
         } else {
             preview_box.querySelector("#pv_prod_price").style.color = "#f73f52";
@@ -310,9 +224,6 @@ function make_preview_box(price, image) {
         preview_box.querySelector("#pv_prod_price").textContent = price;
         preview_box.querySelector("#pv_prod_price").style.color = "black";
     }
-
-
-    console.log($(preview_box).find("#pv_prod_price"));
     return preview_box
 }
 
@@ -321,18 +232,13 @@ function update_preview_box(box) {
 }
 
 function update_preview_min(price) {
-
     $(mc_root).find("#preview_min_root #price").text("$" + price);
-
     if (parseInt(price) < parseInt(prod_deets.prod_price)) {
-
         $(mc_root).find("#preview_min_root #price").css("color", "#8fc952");
     } else {
         $(mc_root).find("#preview_min_root #price").css("color", "#f73f52");
     }
-
 }
-
 
 function make_results_template() {
     var content = $("<div/>").append(template_results_template)[0];
@@ -344,41 +250,29 @@ function make_results_template() {
         if (dock_settings == "left") {
             result_template = template_html.querySelector('template#makkhi_results').content;
             dittory_template = template_html.querySelector('template#dittory_results_left').content;
-
         }
-
         if (dock_settings == "top") {
             result_template = template_html.querySelector('template#makkhi_results').content;
             dittory_template = template_html.querySelector('template#dittory_results_top').content;
-
         }
-
         if (dock_settings == "right") {
             result_template = template_html.querySelector('template#makkhi_results').content;
             dittory_template = template_html.querySelector('template#dittory_results_left').content;
-
         }
-
         if (dock_settings == "bottom") {
             result_template = template_html.querySelector('template#makkhi_results').content;
             dittory_template = template_html.querySelector('template#dittory_results_top').content;
-
         }
     }
-
 }
 
-
 function make_results_box(curr_prod_deets_var, afftridtype = ' ', oos = false) {
-
     if (afftridtype === 'searchid') {
         curr_prod_deets_var["link"] = curr_prod_deets_var.prod_link;
         curr_prod_deets_var["from_back_search"] = true;
     } else {
         curr_prod_deets_var["from_back_search"] = false;
     }
-
-    //checking for results which are 3x more or less than current price
     if (!oos) {
         var current_result_price = parseInt(curr_prod_deets_var.prod_price);
         var page_price = parseInt(prod_deets.prod_price);
@@ -389,195 +283,124 @@ function make_results_box(curr_prod_deets_var, afftridtype = ' ', oos = false) {
             website = curr_prod_deets_var.website
         }
     }
-
-
     if (!view_update) {
         if (!oos) {
             price_results.push(curr_prod_deets_var);
         } else {
             oos_results.push(curr_prod_deets_var);
         }
-
     }
-
     var repl_strng, redir_link;
-
     if (afftridtype === 'searchid') {
-        // redir_link=affyLinkify(curr_prod_deets_var,'');
         curr_prod_deets_var.website = curr_prod_deets_var.prod_site;
-    } else {
-        // redir_link = affyLinkifySim(curr_prod_deets_var,'');
     }
     redir_link = curr_prod_deets_var.link;
     var site_name = prod_site_list[curr_prod_deets_var.website];
     if (site_name) {
         site_name = site_name.charAt(0).toUpperCase() + site_name.slice(1);
     } else if (curr_prod_deets_var.prod_site) {
-        console.log("setting prod site");
-        console.log(curr_prod_deets_var.prod_site);
         site_name = curr_prod_deets_var.prod_site;
     } else {
         curr_prod_deets_var;
     }
-
-    console.log(curr_prod_deets_var);
-    console.log("website code is " + curr_prod_deets_var.website);
-    console.log("site name is" + site_name);
-    console.log("redir_link is " + redir_link);
-    //doing deep copy from global variable
     var result_box = result_template.cloneNode(true);
-
     result_box.querySelector("a").href = redir_link;
     result_box.querySelector(".site_name").textContent = site_name;
     result_box.querySelector(".prod_title").textContent = curr_prod_deets_var.title;
     result_box.querySelector("a").setAttribute("title", curr_prod_deets_var.title);
-
     if (oos == false) {
-        //decide color here
         result_box.querySelector("div").classList.add("price_result");
         result_box.querySelector(".main-price").textContent = "$" + parseInt(curr_prod_deets_var.prod_price);
-
         if (curr_prod_deets_var.prod_price < prod_deets.prod_price) {
             result_box.querySelector(".main-price").classList.add("green-title");
         } else {
             result_box.querySelector(".main-price").classList.add("red-title");
         }
-
     } else {
         result_box.querySelector("div").classList.add("oos_result");
         result_box.querySelector(".main-price").textContent = "Sold";
         result_box.querySelector(".main-price").style.color = "gray";
     }
-
     result_box.querySelector(".image img").src = curr_prod_deets_var.img_src;
     return result_box.cloneNode(true);
-
-
 }
 
-
 function make_manual_search_box(curr_prod_deets_var, link_type, afftridtype = ' ') {
-
     curr_prod_deets_var["website"] = curr_prod_deets_var["prod_site"];
     if (!view_update) {
         search_results.push(curr_prod_deets_var);
     }
-
-
     var repl_strng, redir_link;
     var site_name = "";
-    // redir_link=affyLinkifySimmanualsearch(curr_prod_deets_var,curr_prod_deets_var.prod_link,'');
     redir_link = curr_prod_deets_var.prod_link;
-
     var site_name = prod_site_list[curr_prod_deets_var.prod_site];
     if (site_name) {
         site_name = site_name.charAt(0).toUpperCase() + site_name.slice(1);
     }
-
-    //doing deep copy from global variable
     var result_box = result_template.cloneNode(true);
-
-    console.log(result_box);
-
-    console.log(site_name);
-
-    console.log(curr_prod_deets_var);
-
     result_box.querySelector("a").href = redir_link;
     result_box.querySelector(".site_name").textContent = site_name;
     result_box.querySelector(".prod_title").textContent = curr_prod_deets_var.title;
-
-    //decide color here
     result_box.querySelector(".main-price").textContent = "Search"
     result_box.querySelector(".image img").src = curr_prod_deets_var.img_src;
     result_box.querySelector(".image img").classList.add("opaque");
-
     result_box.querySelector("div").classList.add("manual_search_result");
     return result_box.cloneNode(true);
-
-
 }
-
-
 r_box = "";
 
 function insert_price_result_box(result_box) {
-
     var results_list = [];
-
     if (!result_box) {
         return;
     }
-
-
     if ($("#mc_main_host").css("display") == 'none') {
-        console.log("in price result");
         $("#mc_main_host").css("display", "block");
     }
-
     result_box = result_box.querySelector("div.item");
     r_box = result_box;
     var current_price = parseInt($(result_box).find(".main-price").text().slice(1));
     var current_image = $(result_box).find(".image img").attr("src");
-
-    // results_list = $(mc_root).find("#results_container #price_results a.result_link");
     results_list = $(mc_root).find("#results_container #price_results div.item");
     if (results_list.length == 0) {
-        //no result result box is empty
         $(result_view).find("#results_container #price_results").append(result_box);
         update_preview_box(make_preview_box(current_price, current_image));
         update_preview_min(current_price);
     } else {
-        //insert it in the correct place based on price order
         var result_inserted = false;
         for (var i = 0; i < results_list.length; i++) {
-            //index starts from top result
             var result_list_el_price = parseInt($(results_list[i]).find(".main-price").text().slice(1));
             if (current_price < result_list_el_price) {
                 $(result_box).insertBefore(results_list[i]);
-                //update welcome box
                 if (i == 0) {
-                    //1st position
                     update_preview_box(make_preview_box(current_price, current_image));
                     update_preview_min(current_price);
                 }
-
                 var result_inserted = true;
                 break;
             }
         }
-
         if (!result_inserted) {
             $(result_view).find("#results_container #price_results").append(result_box);
         }
     }
-
-
     if (dock_settings == "top") {
         insert_to_carousel();
         return;
     }
-
-
     if (dock_settings == "bottom") {
         insert_to_carousel();
         return;
     }
-
-
-
 }
 
 function insert_manual_search_box(box) {
     // $(result_view).find("#results_container #manual_search").append(box);
-   
     $(result_view).find("#results_container #manual_search").append(box);
-
     if ($(mc_root).find("#preview_min_root #price").text() == "loading") {
         $(mc_root).find("#preview_min_root #price").text("Search");
         update_preview_box(make_preview_box("search", prod_deets.prod_img));
     }
-
     if (dock_settings == "top") {
         insert_to_carousel();
         return;
@@ -586,51 +409,38 @@ function insert_manual_search_box(box) {
         insert_to_carousel();
         return;
     }
-
-
-
 }
 
 function insert_oos_box(box) {
- 
     $(result_view).find("#results_container #oos").append(box);
     if (dock_settings == "top") {
         insert_to_carousel();
         return;
     }
-
 }
 
 function hide_preview_display_results() {
-
     //making preview box it draggable
-
     if (view_results_first_time) {
         view_results_first_time = false;
     }
-
-
     if (dock_settings == "left") {
         $("#mc_main_host").animate({
             "left": -500
-        }, "fast", function() {
+        }, "fast", function () {
             $(mc_root).find("#preview_root").css("display", "none");
-
-            //display resultview
             $(mc_root).find("#results_view_root").css("display", "block");
             $("#mc_main_host").animate({
                 "left": 0,
                 "top": 100
-            }, "fast", function() {});
+            }, "fast", function () {});
         });
     }
-
     if (dock_settings == "top") {
         $("#mc_main_host").animate({
             "left": -500
-        }, "fast", function() {
+        }, "fast", function () {
             $(mc_root).find("#preview_root").css("display", "none");
-
             $("#mc_main_host").css({
                 left: "0px",
                 top: "30px",
@@ -640,36 +450,29 @@ function hide_preview_display_results() {
                 width: "1100px",
                 margin: "0 auto"
             });
-
-            //display resultview
             $(mc_root).find("#results_view_root").css("display", "block");
             $("#mc_main_host").animate({
                 "top": 30
-            }, "fast", function() {});
+            }, "fast", function () {});
         });
     }
-
     if (dock_settings == "right") {
         $("#mc_main_host").animate({
             "right": -500
-        }, "fast", function() {
+        }, "fast", function () {
             $(mc_root).find("#preview_root").css("display", "none");
-
-            //display resultview
             $(mc_root).find("#results_view_root").css("display", "block");
             $("#mc_main_host").animate({
                 "right": 0,
                 "top": 100
-            }, "fast", function() {});
+            }, "fast", function () {});
         });
     }
-
     if (dock_settings == "bottom") {
         $("#mc_main_host").animate({
             "bottom": -500
-        }, "fast", function() {
+        }, "fast", function () {
             $(mc_root).find("#preview_root").css("display", "none");
-
             $("#mc_main_host").css({
                 left: "0px",
                 bottom: "30px",
@@ -679,37 +482,28 @@ function hide_preview_display_results() {
                 width: "1100px",
                 margin: "0 auto"
             });
-
-            //display resultview
             $(mc_root).find("#results_view_root").css("display", "block");
             $("#mc_main_host").animate({
                 "bottom": 30
-            }, "fast", function() {});
+            }, "fast", function () {});
         });
     }
-
-
 }
 
 function hide_results_display_preview() {
-
     if (dock_settings == "left") {
         $("#mc_main_host").animate({
             "left": -500
-        }, "fast", function() {
+        }, "fast", function () {
             $(mc_root).find("#results_view_root").css("display", "none");
-
-            //display resultview
             $(mc_root).find("#preview_root").css("display", "block");
             $("#mc_main_host").animate({
                 "left": 0
             }, "fast");
         });
     }
-
     if (dock_settings == "top") {
         $(mc_root).find("#results_view_root").css("display", "none");
-
         $("#mc_main_host").css({
             left: "0px",
             top: "100px",
@@ -719,32 +513,24 @@ function hide_results_display_preview() {
             width: "150px",
             margin: "0 auto"
         });
-
-        //display preview
         $(mc_root).find("#preview_root").css("display", "block");
         $("#mc_host").animate({
             "left": "0px"
         }, "fast");
-
     }
-
     if (dock_settings == "right") {
         $("#mc_main_host").animate({
             "right": -500
-        }, "fast", function() {
+        }, "fast", function () {
             $(mc_root).find("#results_view_root").css("display", "none");
-
-            //display resultview
             $(mc_root).find("#preview_root").css("display", "block");
             $("#mc_main_host").animate({
                 "right": 0
             }, "fast");
         });
     }
-
     if (dock_settings == "bottom") {
         $(mc_root).find("#results_view_root").css("display", "none");
-
         $("#mc_main_host").css({
             left: "0px",
             top: "100px",
@@ -754,26 +540,18 @@ function hide_results_display_preview() {
             width: "150px",
             margin: "0 auto"
         });
-
-        //display preview
         $(mc_root).find("#preview_root").css("display", "block");
         $("#mc_host").animate({
             "left": "0px"
         }, "fast");
-
     }
-
-
-
 }
 
 function hide_preview_min_display_results() {
-
     if (view_results_first_time) {
         view_results_first_time = false;
     }
     if (dock_settings == "left") {
-
         $(mc_root).find("#preview_min_root").css("display", "none");
         $(mc_root).css({
             "width": $(mc_root).find("#results_view_root").css("width")
@@ -792,11 +570,8 @@ function hide_preview_min_display_results() {
         $("#mc_main_host").animate({
             "left": 0
         }, "fast");
-
     }
-
     if (dock_settings == "top") {
-
         $(mc_root).find("#preview_min_root").css("display", "none");
         $("#mc_main_host").css({
             "top": "-500px",
@@ -820,9 +595,7 @@ function hide_preview_min_display_results() {
         $("#mc_main_host").animate({
             "top": 30
         }, "fast");
-
     }
-
     if (dock_settings == "right") {
         $(mc_root).find("#preview_min_root").css("display", "none");
         $(mc_root).css({
@@ -843,7 +616,6 @@ function hide_preview_min_display_results() {
             "right": 0
         }, "fast");
     }
-
     if (dock_settings == "bottom") {
         $(mc_root).find("#preview_min_root").css("display", "none");
         $(mc_root).css({
@@ -868,14 +640,10 @@ function hide_preview_min_display_results() {
         $("#mc_main_host").animate({
             "bottom": 30
         }, "fast");
-
     }
-
 }
 
-
 function hide_results_display_preview_min() {
-    // $(mc_root).find("#preview_min_root").css("width")
     $(mc_root).find("#results_view_root").css("display", "none");
     $("#mc_main_host").css({
         left: "0px",
@@ -891,120 +659,81 @@ function hide_results_display_preview_min() {
         "width": "0px"
     });
     $(mc_root).find("#preview_min_root").css("display", "block");
-
-
 }
-
 
 function update_data_for_spa(prod_deets_to_process) {
     prod_deets = _.clone(prod_deets_to_process);
     view_results_first_time = true;
     if (preview_box_template != "" && result_template != "" && main_template != "") {
-
         view_update = false;
         price_results = [];
         oos_results = [];
         search_results = [];
         exclusive_results = [];
-
         is_dittory_prods = false;
         is_exclusive = false;
-        //no need to import
-        console.log("no need to import");
-
         $("#mc_main_host").remove();
-
         update_main_template();
-
-        //update event listeners
         setevents();
-
-        //update preview box
         var preview_box = preview_loading_template.cloneNode(true);
-        console.log(preview_box);
         preview_box.querySelector("#pv_makkhi_logo img").src = chrome.extension.getURL('design_files/resources/images/logo.png');
         preview_box.querySelector("#pv_prod_image img").src = prod_deets.prod_img;
         preview_box.querySelector("#pv_load_image img").src = chrome.extension.getURL('design_files/resources/images/spinner.png');
-
         $(preview_box).insertBefore(result_view);
-
-        //update preview min box
         var loading_template = preview_min_box.cloneNode(true);
         loading_template.querySelector("#pv_makkhi_logo img").src = chrome.extension.getURL('design_files/resources/images/logo.png');
         loading_template.querySelector("#pv_popup_close img").src = chrome.extension.getURL('design_files/resources/images/popup-close.png');
         loading_template.querySelector("#price").textContent = "loading";
-        //inserting into page
         var preview_min_root = $(loading_template).insertBefore(result_view);
         make_preview_draggable();
-        //update result template
         update_results_template();
-
         if (dock_settings == "top") {
             initialize_carousel();
         }
         if (dock_settings == "bottom") {
             initialize_carousel();
         }
-
         check_user_settings_show_results();
     } else {
-        console.log("need to import");
         insert_main_container();
     }
-
 }
 
 function update_main_template() {
     var main_temlpate_content = all_container_templates.cloneNode(true);
-
     if (dock_settings == "top") {
         $("body").append("<div id=\"mc_main_host\" style=\"position:fixed; left:0px; top:200px; z-index:9999;\" > <div id=\"mc_host\" style=\"\" ></div> </div>");
         var host = document.getElementById('mc_host');
-
         main_template = main_temlpate_content.querySelector('template#main_template_dock_top').content;
         main_template.querySelector("#owl_css_style").href = chrome.extension.getURL('design_files/css/owl.carousel.min.css');
         main_template.querySelector(".owl_css_style").textContent = "@import \"" + chrome.extension.getURL('design_files/css/owl.carousel.min.css'); + "\"";
-
     }
     if (dock_settings == "left") {
         $("body").append("<div id=\"mc_main_host\" style=\"position:fixed; left:0px; top:200px; z-index:9999;\" > <div id=\"mc_host\" style=\"\" ></div> </div>");
         var host = document.getElementById('mc_host');
-
         main_template = main_temlpate_content.querySelector('template#main_template_dock_left').content;
-
     }
-
     if (dock_settings == "right") {
-
         $("body").append("<div id=\"mc_main_host\" style=\"position:fixed; right:0px; top:200px; z-index:9999;\" > <div id=\"mc_host\" style=\"\" ></div> </div>");
         var host = document.getElementById('mc_host');
-
         main_template = main_temlpate_content.querySelector('template#main_template_dock_left').content;
-
     }
-
     if (dock_settings == "bottom") {
         $("body").append("<div id=\"mc_main_host\" style=\"position:fixed; left:0px; bottom:200px; z-index:9999;\" > <div id=\"mc_host\" style=\"\" ></div> </div>");
         var host = document.getElementById('mc_host');
-
         main_template = main_temlpate_content.querySelector('template#main_template_dock_bot').content;
         main_template.querySelector("#owl_css_style").href = chrome.extension.getURL('design_files/css/owl.carousel.min.css');
         main_template.querySelector(".owl_css_style").textContent = "@import \"" + chrome.extension.getURL('design_files/css/owl.carousel.min.css'); + "\"";
     }
-
     var dock_icon_0 = chrome.extension.getURL('design_files/resources/images/icons0.png');
     var dock_icon_1 = chrome.extension.getURL('design_files/resources/images/icons1.png');
     var dock_icon_2 = chrome.extension.getURL('design_files/resources/images/icons2.png');
     var dock_icon_3 = chrome.extension.getURL('design_files/resources/images/icons3.png');
     var dock_icon_4 = chrome.extension.getURL('design_files/resources/images/icon4.png');
-
     main_template.querySelector("#fa_style").href = chrome.extension.getURL('design_files/css/font-awesome.min.css');
     main_template.querySelector("#main_css_style").href = chrome.extension.getURL('design_files/css/popup.css');
-
     main_template.querySelector(".main_css_style").textContent = "@import \"" + chrome.extension.getURL('design_files/css/popup.css') + "\"";
     main_template.querySelector(".fa_style").textContent = "@import \"" + chrome.extension.getURL('design_files/css/font-awesome.min.css') + "\"";
-
-
     main_template.querySelector("#green_arrow img").src = chrome.extension.getURL('design_files/resources/images/arrow-green.png');
     main_template.querySelector("#dock_main img").src = dock_icon_0;
     main_template.querySelector("#dock_row_1 img").src = dock_icon_0;
@@ -1012,15 +741,12 @@ function update_main_template() {
     main_template.querySelector("#dock_row_3 img").src = dock_icon_2;
     main_template.querySelector("#dock_row_4 img").src = dock_icon_3;
     main_template.querySelector("#dock_row_5 img").src = dock_icon_4;
-
     $("#mc_main_host").css("display", "none");
     if (shadow_dom_support == "v1") {
-        //attachShadow
         var container_dom = host.attachShadow({
             "mode": "open"
         });
     } else if (shadow_dom_support == "v0") {
-        // createShadowRoot
         var container_dom = host.createShadowRoot({
             "mode": "open"
         });
@@ -1028,7 +754,6 @@ function update_main_template() {
     container_dom.appendChild(main_template.cloneNode(true));
     mc_root = container_dom.querySelector("#mc_root");
     result_view = container_dom.querySelector("#results_view_root");
-
     if (dock_settings == "top") {
         initialize_carousel();
     }
@@ -1036,7 +761,6 @@ function update_main_template() {
         initialize_carousel();
     }
     if (dock_settings == "right") {
-        console.log("setting transform to arrow");
         $(result_view).find("#green_arrow img").css("transform", "rotate(180deg)");
     }
 }
@@ -1046,301 +770,197 @@ function update_results_template() {
     if (dock_settings == "left") {
         result_template = template_html.querySelector('template#makkhi_results').content;
         dittory_template = template_html.querySelector('template#dittory_results_left').content;
-
     }
-
     if (dock_settings == "top") {
         result_template = template_html.querySelector('template#makkhi_results').content;
         dittory_template = template_html.querySelector('template#dittory_results_top').content;
-
     }
-
     if (dock_settings == "right") {
         result_template = template_html.querySelector('template#makkhi_results').content;
         dittory_template = template_html.querySelector('template#dittory_results_left').content;
-
     }
-
     if (dock_settings == "bottom") {
         result_template = template_html.querySelector('template#makkhi_results').content;
         dittory_template = template_html.querySelector('template#dittory_results_top').content;
-
     }
-
-
 }
-
-//logic based on events
 function setevents() {
-
-
-
     $(document).on("click", doc_click_handler);
     set_button_events();
-    $(result_view).on('mousewheel', '#results_container', function(e) {
+    $(result_view).on('mousewheel', '#results_container', function (e) {
         var e0 = e.originalEvent,
             delta = e0.wheelDelta || -e0.detail;
         this.scrollTop += (delta < 0 ? 1 : -1) * 30;
         e.preventDefault();
     });
-
-
-    $(result_view).find(".dropdown-menu #dock_main").click(function() {
-
+    $(result_view).find(".dropdown-menu #dock_main").click(function () {
         if ($(result_view).find(".dropdown-menu ul").css("display") == "none") {
             $(result_view).find(".dropdown-menu ul").css("display", "block");
         } else if ($(result_view).find(".dropdown-menu ul").css("display") == "block") {
             $(result_view).find(".dropdown-menu ul").css("display", "none");
         }
-
     });
-
-    //dock settings
-
-    $(result_view).find(".dropdown-menu #dock_row_1").click(function() {
-        //left dock functions
+    $(result_view).find(".dropdown-menu #dock_row_1").click(function () {
         if (dock_settings != "left") {
-
             chrome.storage.local.get({
                 "dock_settings": ""
-            }, function(response) {
+            }, function (response) {
                 if (response.dock_settings != "") {
-                    //make settings
                     var d_settings = response.dock_settings;
                     d_settings[prod_deets.prod_site] = "left"
                     chrome.storage.local.set({
                         "dock_settings": d_settings
-                    }, function(set_response) {
+                    }, function (set_response) {
                         dock_settings = "left";
-                        // update_data_for_spa();
                         update_view_data();
                     });
-
-
                 } else {
                     var d_settings = {};
                     d_settings[prod_deets.prod_site] = "left"
                     chrome.storage.local.set({
                         "dock_settings": d_settings
-                    }, function(set_response) {
+                    }, function (set_response) {
                         dock_settings = "left";
-                        // update_data_for_spa();
                         update_view_data();
-
                     });
-
                 }
-
             });
         }
-
     });
-
-    $(result_view).find(".dropdown-menu #dock_row_2").click(function() {
-        //right dock functions
-
-
+    $(result_view).find(".dropdown-menu #dock_row_2").click(function () {
         if (dock_settings != "right") {
             chrome.storage.local.get({
                 "dock_settings": ""
-            }, function(response) {
+            }, function (response) {
                 if (response.dock_settings != "") {
-                    //make settings
                     var d_settings = response.dock_settings;
                     d_settings[prod_deets.prod_site] = "right"
                     chrome.storage.local.set({
                         "dock_settings": d_settings
-                    }, function(set_response) {
+                    }, function (set_response) {
                         dock_settings = "right";
-                        // update_data_for_spa();
                         update_view_data();
                     });
-
-
                 } else {
                     var d_settings = {};
                     d_settings[prod_deets.prod_site] = "right"
                     chrome.storage.local.set({
                         "dock_settings": d_settings
-                    }, function(set_response) {
+                    }, function (set_response) {
                         dock_settings = "right";
-                        // update_data_for_spa();
                         update_view_data();
-
                     });
-
                 }
-
             });
         }
-
-
     });
-
-    $(result_view).find(".dropdown-menu #dock_row_3").click(function() {
-        //top dock functions
-
+    $(result_view).find(".dropdown-menu #dock_row_3").click(function () {
         if (dock_settings != "top") {
             chrome.storage.local.get({
                 "dock_settings": ""
-            }, function(response) {
+            }, function (response) {
                 if (response.dock_settings != "") {
-                    //make settings
                     var d_settings = response.dock_settings;
                     d_settings[prod_deets.prod_site] = "top"
                     chrome.storage.local.set({
                         "dock_settings": d_settings
-                    }, function(set_response) {
+                    }, function (set_response) {
                         dock_settings = "top";
-                        // update_data_for_spa();
                         update_view_data();
                     });
-
-
                 } else {
                     var d_settings = {};
                     d_settings[prod_deets.prod_site] = "top"
                     chrome.storage.local.set({
                         "dock_settings": d_settings
-                    }, function(set_response) {
+                    }, function (set_response) {
                         dock_settings = "top";
-                        // update_data_for_spa();
                         update_view_data();
-
                     });
-
                 }
-
             });
         }
-
     });
-
-    $(result_view).find(".dropdown-menu #dock_row_4").click(function() {
-        //bottom dock functions
-
+    $(result_view).find(".dropdown-menu #dock_row_4").click(function () {
         if (dock_settings != "bottom") {
             chrome.storage.local.get({
                 "dock_settings": ""
-            }, function(response) {
+            }, function (response) {
                 if (response.dock_settings != "") {
-                    //make settings
                     var d_settings = response.dock_settings;
                     d_settings[prod_deets.prod_site] = "bottom"
                     chrome.storage.local.set({
                         "dock_settings": d_settings
-                    }, function(set_response) {
+                    }, function (set_response) {
                         dock_settings = "bottom";
-                        // update_data_for_spa();
                         update_view_data();
                     });
-
-
                 } else {
                     var d_settings = {};
                     d_settings[prod_deets.prod_site] = "bottom"
                     chrome.storage.local.set({
                         "dock_settings": d_settings
-                    }, function(set_response) {
+                    }, function (set_response) {
                         dock_settings = "bottom";
-                        // update_data_for_spa();
                         update_view_data();
-
                     });
-
                 }
-
             });
         }
     });
-
-    $(result_view).find(".dropdown-menu #dock_row_5").click(function() {
-        //center dock functions
+    $(result_view).find(".dropdown-menu #dock_row_5").click(function () {
     });
-
-
-    $(mc_root).on("click", "#preview_root", function(e) {
+    $(mc_root).on("click", "#preview_root", function (e) {
         if (!$(mc_root).find("#preview_root").hasClass('closed')) {
             $(mc_root).find("#preview_root").addClass('closed')
             hide_preview_display_results();
         }
-
     });
-
-
-    //set preview box hover listener
-    $(mc_root).on("mouseenter", "#preview_root", function(e) {
-        $(this).data('timeout', setTimeout(function() {
+    $(mc_root).on("mouseenter", "#preview_root", function (e) {
+        $(this).data('timeout', setTimeout(function () {
             if (!$(mc_root).find("#preview_root").hasClass('closed')) {
                 $(mc_root).find("#preview_root").addClass('closed')
                 hide_preview_display_results();
             } else {
                 clearTimeout($(this).data('timeout'));
             }
-
-            //send makhibox view analytics
         }, 1000));
-
     });
-
-    $(mc_root).on("mouseleave", "#preview_root", function(e) {
+    $(mc_root).on("mouseleave", "#preview_root", function (e) {
         clearTimeout($(this).data('timeout'));
     });
-
-    $(mc_root).on("mouseenter", "#preview_min_root", function(e) {
+    $(mc_root).on("mouseenter", "#preview_min_root", function (e) {
         $(mc_root).find("#preview_min_root .pop-up").css("box-shadow", "3px 3px #e0e0e0");
     });
-
-    $(mc_root).on("mouseleave", "#preview_min_root", function(e) {
+    $(mc_root).on("mouseleave", "#preview_min_root", function (e) {
         $(mc_root).find("#preview_min_root .pop-up").css("box-shadow", "");
     });
-
-    //set preview min click listener
-    $(mc_root).on("click", "#preview_min_root", function(event) {
-
+    $(mc_root).on("click", "#preview_min_root", function (event) {
         ctabby_click = 'button_click';
         if ($(event.target).is("#pv_track_button") || $(event.target).is("span#track_icon")) {
-
             ctabby_click = 'pvm_track_button_click';
         }
     });
-
-
-    //left arrow in results view
-    $(mc_root).on("click", "#green_arrow", function(e) {
+    $(mc_root).on("click", "#green_arrow", function (e) {
         hide_results_display_preview_min();
     });
-
 }
 
-
 function insert_to_carousel(result) {
-
-     var carousel_html = $(result_view).find("#results_container #exclusive").html();
+    var carousel_html = $(result_view).find("#results_container #exclusive").html();
     carousel_html += $(result_view).find("#results_container #price_results").html();
     carousel_html += $(result_view).find("#results_container #oos").html();
     carousel_html += $(result_view).find("#results_container #manual_search").html();
-
-    console.log('carousel_html log');
-
-
     owl.trigger('replace.owl.carousel', [jQuery($.trim(carousel_html))]).trigger('refresh.owl.carousel');
     owl.trigger("to.owl.carousel", [0]);
-
-
     if ($(result_view).find(".mc_owl_prev").length == 0) {
-
         insert_owl_custom_nav_buttons();
     }
-
-
 }
-
 var owl = "";
 
 function initialize_carousel() {
     owl = $(result_view).find('.products .owl-carousel');
-
     owl.owlCarousel({
         loop: false,
         stagePadding: 30,
@@ -1361,117 +981,78 @@ function initialize_carousel() {
             }
         }
     });
-
-    owl.on('mousewheel', '.owl-stage', function(e) {
+    owl.on('mousewheel', '.owl-stage', function (e) {
         if (e.deltaY > 0) {
             owl.trigger('prev.owl.carousel');
         } else {
-
             owl.trigger('next.owl.carousel');
         }
         e.preventDefault();
     });
-
 }
 
-
-
 function insert_owl_custom_nav_buttons() {
-    //inserting custom nav buttons
     $(result_view).find(".owl-nav").remove()
-
     $(result_view).find(".owl-carousel").append('<a href="javascript:;" class="mc_owl_prev" style="position:absolute; top:50%; left:15px;">\
                 <img src="' + chrome.extension.getURL("design_files/resources/images/arrow-green.png") + '">\
             </a>')
     $(result_view).find(".owl-carousel").append('<a href="javascript:;" class="mc_owl_next" style="position:absolute; top:50%; right:15px;">\
                 <img style="transform: rotate(180deg);"src="' + chrome.extension.getURL("design_files/resources/images/arrow-green.png") + '">\
             </a>')
-
-    $(result_view).on('click', '.mc_owl_prev', function() {
-        console.log("owl previous button click detected")
+    $(result_view).on('click', '.mc_owl_prev', function () {
         owl.trigger("prev.owl.carousel");
     });
-
-    $(result_view).on('click', '.mc_owl_next', function() {
-        console.log("owl next button click detected")
+    $(result_view).on('click', '.mc_owl_next', function () {
         owl.trigger("next.owl.carousel");
     });
-
 }
 
-
 function update_view_data() {
-
-    //no need to import
-    console.log("no need to import");
-
     $("#mc_main_host").remove();
-
     update_main_template();
-
-    //update event listeners
     setevents();
-
-    //update preview box
     var preview_box = preview_loading_template.cloneNode(true);
-    console.log(preview_box);
     preview_box.querySelector("#pv_makkhi_logo img").src = chrome.extension.getURL('design_files/resources/images/logo.png');
     preview_box.querySelector("#pv_prod_image img").src = prod_deets.prod_img;
     preview_box.querySelector("#pv_load_image img").src = chrome.extension.getURL('design_files/resources/images/spinner.png');
     preview_box.querySelector("div").style.display = "none";
-
     $(preview_box).insertBefore(result_view);
-
-    //update preview min box
     var loading_template = preview_min_box.cloneNode(true);
     loading_template.querySelector("#pv_makkhi_logo img").src = chrome.extension.getURL('design_files/resources/images/logo.png');
     loading_template.querySelector("#pv_popup_close img").src = chrome.extension.getURL('design_files/resources/images/popup-close.png');
     loading_template.querySelector("#price").textContent = "loading";
-    //inserting into page
     var preview_min_root = $(loading_template).insertBefore(result_view);
-
     make_preview_draggable();
-    //update result template
     update_results_template();
-
     if (dock_settings == "top") {
         initialize_carousel();
     }
     if (dock_settings == "bottom") {
         initialize_carousel();
     }
-
     if (is_exclusive) {
         insert_exclusive_msg();
     }
-
     view_update = true;
-
     if (price_results.length == 0) {
         // 
         $(mc_root).find("#preview_min_root #price").text("aww");
         $(mc_root).find("#preview_min_root #price").css("color", "gray");
     }
-
     if (!is_dittory_prods) {
         for (var i = 0; i < price_results.length; i++) {
             insert_price_result_box(make_results_box(price_results[i], '', false))
         }
-
         for (var i = 0; i < oos_results.length; i++) {
             insert_oos_box(make_results_box(oos_results[i], '', true))
         }
-
         for (var i = 0; i < search_results.length; i++) {
             insert_manual_search_box(make_manual_search_box(search_results[i], '', false))
         }
-
     }
-    //displaying results
     hide_preview_display_results();
     $("#mc_main_host").css("display", "block");
     view_update = true;
-
 }
 
 function get_report() {
@@ -1493,36 +1074,28 @@ function get_report() {
                     <div id="mc_report_popup_msg" style="text-align: center; display:none;"> Success </div>\
             </div>\
         </div>';
-
     $("body").append(report_box);
 
     function remove_report_popup() {
-        //remove all events
         $("body").off("click", "#mc_report_popup_container #mc_report_popup_close_box");
         $("body").off("click", "#mc_report_popup_container .submit");
-        //remove box
         $("#mc_report_popup_container").remove();
     }
-
-    $("body").on("click", "#mc_report_popup_container #mc_report_popup_close_box", function() {
+    $("body").on("click", "#mc_report_popup_container #mc_report_popup_close_box", function () {
         remove_report_popup();
     });
-
-    $("body").on("click", "#mc_report_popup_container .submit", function() {
-
+    $("body").on("click", "#mc_report_popup_container .submit", function () {
         chrome.storage.local.get({
             "gcm_id": "",
             "user_id": ""
-        }, function(response) {
+        }, function (response) {
             var id_deets = {};
             id_deets['user_id'] = response.user_id;
             id_deets['gcm_id'] = response.gcm_id;
-            console.log("submit click functions");
             $("#mc_report_popup_container .submit").attr("disabled", true);
             var reason = $('#mc_report_popup_container select').val();
             var comment = $('#mc_report_popup_container textarea').val();
             var link = window.location.href;
-
             $("#mc_report_popup_msg").css("display", "none");
             if ((comment != "") && ($.trim(comment) != "")) {
                 var feedback_obj = {
@@ -1533,9 +1106,7 @@ function get_report() {
                     'gcm_id': id_deets.gcm_id,
                     'ver': chrome.runtime.getManifest().version.toString(),
                     'ext_id': chrome.runtime.id
-
                 };
-
                 var req_send = backPostGet({
                     type: "POST",
                     url: "https://shades.makkhichoose.com/analytics/logextensionfeedback",
@@ -1544,166 +1115,112 @@ function get_report() {
                     dataType: "json",
                     timeout: 3500,
                 });
-
-                req_send.done(function(response) {
+                req_send.done(function (response) {
                     $('#mc_report_popup_container .submit').attr("disabled", true);
                     $('#mc_report_popup_msg').css('color', '#8fc952');
                     $('#mc_report_popup_msg').text("Thank you for your feedback");
                     $("#mc_report_popup_msg").css("display", "block");
-                    setTimeout(function() {
+                    setTimeout(function () {
                         remove_report_popup();
                     }, 1500);
                 });
-
-                req_send.fail(function(response) {
+                req_send.fail(function (response) {
                     $('#mc_report_popup_container .submit').attr("disabled", false);
                     $('#mc_report_popup_msg').css('color', '#f73f52');
                     $('#mc_report_popup_msg').text("Something went wrong, please try again");
                     $("#mc_report_popup_msg").css("display", "block");
-
                 });
-
             } else {
                 $('#mc_report_popup_container .submit').attr("disabled", false);
                 $('#mc_report_popup_msg').css('color', '#f73f52');
                 $('#mc_report_popup_msg').text("Something went wrong, please try again");
                 $("#mc_report_popup_msg").css("display", "block");
-
             }
         });
-
     });
-
 }
 
-
 function set_button_events() {
-
-    $(result_view).find(".options_button").on('click', function() {
+    $(result_view).find(".options_button").on('click', function () {
         chrome.runtime.sendMessage({
             method: 'settings_button_click'
         });
         chrome.runtime.sendMessage({
             method: "showOptionsPage"
         });
-
     });
-
-
-
-
-    $(result_view).find(".report_button").on('click', function() {
+    $(result_view).find(".report_button").on('click', function () {
         get_report();
     });
-
-    $(result_view).find(".tutorial_button").on('click', function() {
+    $(result_view).find(".tutorial_button").on('click', function () {
         chrome.runtime.sendMessage({
             "method": "help_button_click",
             "uid": id_deets.user_id
         });
     });
-
-
 }
 
 function make_preview_draggable() {
     $(mc_root).find("#preview_min_root").draggable({
         containment: [-90000, -90000, 90000, 90000],
-        start: function(event, ui) {
+        start: function (event, ui) {
             $(this).addClass('noclick');
         },
         stop: makkhimin_drag_stop,
         zIndex: 99999
     });
     getmmpos();
-
 }
 
-// console.log("setting click event listener");
-
-
-
-
 function doc_click_handler(event) {
-
     if (ctabby_click == 'button_click') {
-        console.log("button click not closing things");
         ctabby_click = '';
         if (site_type == "flights") {
             flights_hide_preview_display_results();
         } else {
-            console.log("calling hpmdr from doc_click_handler");
             hide_preview_min_display_results();
         }
-
         event.preventDefault();
         return;
     }
-
     if (ctabby_click == 'pvm_track_button_click') {
-        // do track_actions
         ctabby_click = '';
-        console.log("track button click");
         event.preventDefault();
         return;
     }
-
     if (ctabby_click == 'show_all_button_click') {
         ctabby_click = '';
         event.preventDefault();
         return;
-
     }
-
-
     if ($(event.target).is("#mc_host")) {
-        console.log("event to mc_main_host");
         return;
     } else {
-        console.log("event target");
-        console.log(event.target);
         if (prod_deets.prod_site == "aj") {
             if ($(event.target).is(".slick-next")) {
-                console.log('ajio image carousee next button auto click');
                 return;
             }
         }
     }
-
-
-
-
     if (result_view && (site_type != "flights") && ($(mc_root).find("#preview_root").css("display") == "none")) {
         if ($(mc_root).find("#preview_root_min").css("display") != "none") {
-
             if ($(result_view).find(".dropdown-menu ul").css("display") == "block") {
                 $(result_view).find(".dropdown-menu ul").css("display", "none");
             }
             hide_results_display_preview_min();
         }
         return;
-
     }
-
     if (result_view && (site_type == "flights")) {
         if ($(mc_root).find("#preview_root_min").css("display") != "none") {
-
             if ($(result_view).find(".dropdown-menu ul").css("display") == "block") {
                 $(result_view).find(".dropdown-menu ul").css("display", "none");
             }
-
             flights_hide_results_display_preview();
         }
         return;
-
     }
-
-
-
-
 }
-
-
 
 function dateDiffInDays(time_in_ms1, time_in_ms2) {
     var _MS_PER_DAY = 1000 * 60 * 60 * 24;
@@ -1712,70 +1229,49 @@ function dateDiffInDays(time_in_ms1, time_in_ms2) {
     var b = new Date(time_in_ms2);
     var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
     var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
-
     return Math.floor((utc1 - utc2) / _MS_PER_DAY);
 }
-
 
 function makkhimin_drag_stop(event, ui) {
     var mc_draggable_left_limit = 0;
     var mc_draggable_top_limit = 0;
     var mc_draggable_right_limit = parseInt($(mc_root).find("#preview_min_root .pop-up").outerWidth());
     var mc_draggable_bot_limit = parseInt($(mc_root).find("#preview_min_root").css("height"));;
-
     if (prod_deets.prod_site == "mmt") {
         mc_draggable_top_limit = 75;
     }
     if (prod_deets.prod_site == "aj") {
         mc_draggable_top_limit = 75;
     }
-
-
     var top_pos = parseInt($(this).css('top'));
     var left_pos = parseInt($(this).css('left'));
-    console.log('left: ' + left_pos + ' Top: ' + top_pos);
     var pos_saved = false;
-
-    if ((top_pos > window.innerHeight - mc_draggable_bot_limit) || top_pos < 0) {
-        console.log('did not saved makkhi pos');
-    } else if ((left_pos > window.innerWidth - mc_draggable_right_limit) || left_pos < 0) {
-        console.log('did not saved makkhi pos');
-    } else {
-        console.log('saved makkhi pos');
+    if ((top_pos > window.innerHeight - mc_draggable_bot_limit) || top_pos < 0) {} else if ((left_pos > window.innerWidth - mc_draggable_right_limit) || left_pos < 0) {} else {
         pos_saved = true;
         savemakkhiminpos(top_pos, left_pos, window.innerHeight, window.innerWidth);
     }
-
     if (top_pos > window.innerHeight - mc_draggable_bot_limit) {
-        console.log(' top position too high');
         top_pos = (window.innerHeight - mc_draggable_bot_limit);
         $(mc_root).find("#preview_min_root").css('top', (window.innerHeight - mc_draggable_bot_limit) + 'px');
     }
     if (top_pos < mc_draggable_top_limit) {
-        console.log('top position too low');
         top_pos = mc_draggable_top_limit;
         $(mc_root).find("#preview_min_root").css('top', mc_draggable_top_limit + 'px');
     }
-
     if (left_pos > window.innerWidth - mc_draggable_right_limit) {
-        console.log(' left position too high');
         left_pos = (window.innerWidth - mc_draggable_right_limit);
         $(mc_root).find("#preview_min_root").css('left', (window.innerWidth - mc_draggable_right_limit) + 'px');
     }
     if (left_pos < mc_draggable_left_limit) {
-        console.log(' left position too low');
         left_pos = -mc_draggable_left_limit;
         $(mc_root).find("#preview_min_root").css('left', mc_draggable_left_limit + 'px');
     }
     if (pos_saved == false) {
-        console.log('new positions' + 'left: ' + left_pos + ' Top: ' + top_pos);
         savemakkhiminpos(top_pos, left_pos, window.innerHeight, window.innerWidth);
     }
-
 }
 
 function savemakkhiminpos(top, left, wh, ww) {
-
     chrome.runtime.sendMessage({
         site: prod_deets.prod_site,
         method: 'save_makkhi_min_pos',
@@ -1787,38 +1283,28 @@ function savemakkhiminpos(top, left, wh, ww) {
 }
 
 function getmmpos() {
-    // var mc_draggable_left_limit = parseInt($(mc_root).find("#preview_min_root .pop-up").css("width"));
-    // var mc_draggable_top_limit = parseInt($(mc_root).find("#preview_min_root").css("height"));;
     var mc_draggable_top_limit = 0;
     var mc_draggable_left_limit = 0;
     var mc_draggable_right_limit = parseInt($(mc_root).find("#preview_min_root div.pop-up").outerWidth());
     var mc_draggable_bot_limit = parseInt($(mc_root).find("#preview_min_root").css("height"));;
-
     if (prod_deets.prod_site == "mmt") {
         mc_draggable_top_limit = 75;
     }
-
-
     var c_wh, c_ww, top, left;
-
     if (prod_deets.prod_site != undefined) {
-
         chrome.runtime.sendMessage({
             method: "get_mmpos",
             site: prod_deets.prod_site
-        }, function(response) {
+        }, function (response) {
             if (response.state == 'ok') {
                 if (response.win_height == undefined || response.win_height == undefined) {
-
                     $(mc_root).find("#preview_min_root").css('left', '0px');
                     $(mc_root).find("#preview_min_root").css('top', (window.innerHeight - 150));
-
                 } else {
                     c_wh = window.innerHeight;
                     c_ww = window.innerWidth;
                     top = Math.round((parseInt(response.pos_top) / parseInt(response.win_height)) * parseInt(c_wh));
                     left = Math.round((parseInt(response.pos_left) / parseInt(response.win_width)) * parseInt(c_ww));
-
                     if (top < mc_draggable_top_limit) {
                         top = mc_draggable_top_limit;
                     }
@@ -1831,16 +1317,11 @@ function getmmpos() {
                     if (left > window.innerWidth - mc_draggable_right_limit) {
                         left = (window.innerWidth - mc_draggable_right_limit);
                     }
-                    // console.log('reset makkhi positions left:'+left+'top:'+top);  
                     $(mc_root).find("#preview_min_root").css('left', left + 'px');
                     $(mc_root).find("#preview_min_root").css('top', top + 'px');
                     savemakkhiminpos(top, left, window.innerHeight, window.innerWidth);
-
                 }
-
-            } else {
-                console.log('mmmpos not ok');
-            }
+            } else {}
         });
     } else {
         setTimeout(getmmpos, 10 * 1000);
@@ -1852,38 +1333,24 @@ function validateEmail(email) {
     return re.test(email);
 }
 
-
 function check_user_settings_show_results() {
     if (prod_deets.backsearch_site) {
-        // non apparel page do backsearch
         $(mc_root).find("#preview_root").css("display", "none");
         $(mc_root).find("#track_icon").css("display", "none")
         do_backsearch_and_get_results(prod_deets);
         hide_results_display_preview_min();
         $(result_view).find(".graph-title").css("display", "none");
         $("#mc_main_host").css("display", "block");
-
-
     } else {
-
         chrome.storage.local.get({
             "user_added_sites_pp": {},
             "user_added_scripts": []
-        }, function(response) {
-
+        }, function (response) {
             var backsearch_site = false;
-
-            console.log(response.user_added_scripts);
-            console.log(response.user_added_scripts.indexOf(window.location.hostname));
-
             if (response["user_added_sites_pp"] || response.user_added_scripts.indexOf(window.location.hostname) > -1) {
-
                 var user_added_sites_pp = response.user_added_sites_pp;
-
                 if (user_added_sites_pp[window.location.hostname] || response.user_added_scripts.indexOf(window.location.hostname) > -1) {
-                    // do back search
                     backsearch_site = true;
-
                     $(mc_root).find("#preview_root").css("display", "none");
                     $(mc_root).find("#track_icon").css("display", "none")
                     do_backsearch_and_get_results(prod_deets);
@@ -1891,13 +1358,10 @@ function check_user_settings_show_results() {
                     $(result_view).find(".graph-title").css("display", "none");
                     $("#mc_main_host").css("display", "block");
                 }
-
             }
-
             if (!backsearch_site) {
-
                 $(mc_root).find("#preview_root").css("display", "none");
-                hide_preview_min_display_results = function(e) {
+                hide_preview_min_display_results = function (e) {
                     var img_src = prod_deets.prod_img;
                     if (prod_deets.prod_img.indexOf('?') > -1) {
                         img_src = prod_deets.prod_img.substring(0, prod_deets.prod_img.indexOf('?'));
@@ -1909,7 +1373,6 @@ function check_user_settings_show_results() {
                     })
                 };
                 hide_results_display_preview_min();
-                // $(mc_root).find("#preview_min_root #price").remove();
                 $(mc_root).find("#preview_min_root #price").css("display", "none");
                 $(mc_root).find("#preview_min_root #pv_track_button").css({
                     "padding-left": "0px"
@@ -1923,16 +1386,8 @@ function check_user_settings_show_results() {
                 $(mc_root).find("#preview_min_root #pv_track_button").css({
                     "padding-top": "5px"
                 });
-
                 $("#mc_main_host").css("display", "block");
-
             }
-
-
         });
-
-
-
     }
 }
-

@@ -1,9 +1,7 @@
 isdevuse = true;
-
-var back_search_sites = ['ub', 'wm', 'au', 'ta', 'ne', 'os', "bb", "co", "je", "be", "sb", "ab", "tk", "po", "ak","ae"];
+var back_search_sites = ['ub', 'wm', 'au', 'ta', 'ne', 'os', "bb", "co", "je", "be", "sb", "ab", "tk", "po", "ak", "ae"];
 
 function back_search(prod_deets, website) {
-    console.log("dping bs for ", website);
     if (website == "ub") {
         back_search_eb(prod_deets);
     } else if (website == "wm") {
@@ -36,12 +34,8 @@ function back_search(prod_deets, website) {
         back_search_po(prod_deets);
     } else if (website == "ak") {
         back_search_ak(prod_deets);
-    } else {
-        console.log("no matching backsearch function found for " + website);
     }
 }
-
-
 
 function do_backsearch_and_get_results(prod_deets) {
     for (var i = 0; i < back_search_sites.length; i++) {
@@ -49,158 +43,101 @@ function do_backsearch_and_get_results(prod_deets) {
             back_search(prod_deets, back_search_sites[i]);
         }
     }
-    //do back search on user added sites
-    console.log("doing backsearch for user added sites");
     do_back_search_for_user_added_sites(prod_deets);
 }
 
 function do_back_search_for_user_added_sites(prod_deets) {
-    console.log("in do_backsearch_and_get_results");
-    console.log(prod_deets);
     chrome.storage.local.get({
         "user_added_sites": ""
-    }, function(response) {
+    }, function (response) {
         if (response.user_added_sites) {
             if (response.user_added_sites.length > 0) {
-                // fetch results for each site and display
                 var user_added_sites = response.user_added_sites;
                 for (var i = 0; i < user_added_sites.length; i++) {
                     if (user_added_sites[i]) {
                         if (user_added_sites[i].host_name != window.location.hostname) {
                             fetch_site_for_user_site(user_added_sites[i], prod_deets.prod_title);
                         }
-                    } else {
-                        // don't have js
-                    }
+                    } else {}
                 }
-            } else {
-                // do nothing
-            }
+            } else {}
         }
-
     });
-
     chrome.storage.local.get({
         "user_added_scripts": ""
-    }, function(response) {
+    }, function (response) {
         if (response.user_added_scripts) {
             var user_added_scripts = response.user_added_scripts;
             for (var i = 0; i < user_added_scripts.length; i++) {
-                // do bs for user added sites
                 if (window.location.hostname != user_added_scripts[i]) {
-                    console.log("doing bs with js on", prod_deets.prod_title);
                     do_bs_for_user_added_script(user_added_scripts[i], prod_deets.prod_title);
                 }
             }
-        } else {
-            // no sites available do nothing
         }
     })
-
 }
-
 
 function do_bs_for_user_added_script(site, title) {
     var key_to_check = "ua_src" + "_" + site;
     var search_obj = {};
     search_obj[key_to_check] = "";
-    console.log(search_obj);
-    chrome.storage.local.get(search_obj, function(response) {
+    chrome.storage.local.get(search_obj, function (response) {
         if (response[key_to_check]) {
-            // script available do 
             search_obj['method'] = "do_bs_with_js";
             search_obj['src_key'] = key_to_check;
             search_obj['site'] = site;
             search_obj['prod_title'] = title;
-
-
-            chrome.runtime.sendMessage(search_obj, function(bs_response) {
-                console.log(bs_response);
-                // got response populate the response
+            chrome.runtime.sendMessage(search_obj, function (bs_response) {
                 bs_response['is_found'] = true;
                 if (bs_response["result_found"]) {
                     insert_price_result_box(make_results_box(bs_response, 'searchid', false));
                 }
-
             })
-        } else {
-
-        }
+        } else {}
     });
 }
 
-
 function fetch_site_for_user_site(deets, title_to_search) {
-    console.log("fetching user site");
-    console.log(deets);
-
     var request_url = make_search_url_from_pattern(deets.search_url_pattern, deets.url_space_delimiter, title_to_search);
-    console.log("fetch request url");
-    console.log(request_url);
-
     var user_site_fetch_req = backPostGet({
         "type": "GET",
         "url": request_url,
     });
-
-    user_site_fetch_req.done(function(response, b, c) {
-        console.log("got results for user added site");
-        console.log(deets);
-
+    user_site_fetch_req.done(function (response, b, c) {
         div = document.createElement("div");
         div.innerHTML = response;
-
         var first_result_element;
         var result_deets = {};
         if (div.querySelector(deets.first_elem_selector)) {
             first_result_element = $(div).find(deets.first_elem_selector + ":eq(0)");
-
             var title_select = $(first_result_element).find(deets.title + ":eq(0)");
             if (title_select.length > 0) {
                 result_deets["title"] = $(title_select).text();
-            } else {
-                console.log("titile select element not found");
             }
-
             var image_select = $(first_result_element).find(deets.img_src + ":eq(0)");
             if (image_select.length > 0) {
                 result_deets["image"] = $(image_select).attr("src");
             } else {
-                console.log("image select element not found");
                 var img_from_first_slector = get_img_src_from_result_selector(div, deets.first_elem_selector);
                 if (img_from_first_slector) {
                     result_deets['image'] = img_from_first_slector;
                 }
             }
-
             var price_select = $(first_result_element).find(deets.price + ":eq(0)");
             if (price_select.length > 0) {
                 result_deets["price"] = $(price_select).text();
-            } else {
-                console.log("price select element not found");
             }
-
             var link_select = $(first_result_element).find(deets.link + ":eq(0)");
             if (link_select.length > 0) {
                 result_deets["link"] = $(link_select).attr("href");
             } else {
-                console.log("link select element not found");
                 var link_from_first_slector = get_link_from_first_result_selector(div, deets.first_elem_selector);
                 if (link_from_first_slector) {
                     result_deets['link'] = link_from_first_slector;
                 }
             }
-
-            console.log("got results");
-
-            console.log(result_deets);
-
-            //check if required deets are available 
-
             if (result_deets["title"] && result_deets["image"] && result_deets["price"] && result_deets["link"]) {
-                //all deets are available display it on results
                 var deets_to_display = {};
-
                 deets_to_display['prod_link'] = make_valid_link_for_user_added_sites(result_deets["link"], deets.host_name);
                 deets_to_display['title'] = result_deets["title"];
                 deets_to_display['prod_price'] = process_price_for_user_added_site(result_deets["price"]);
@@ -208,17 +145,10 @@ function fetch_site_for_user_site(deets, title_to_search) {
                 deets_to_display['prod_site'] = deets.host_name;
                 deets_to_display['img_src'] = make_valid_link_for_user_added_sites(result_deets["image"], deets.host_name);
                 deets_to_display['is_found'] = true;
-
                 insert_price_result_box(make_results_box(deets_to_display, 'searchid', false));
-            } else {
-                // don't display anything 
-            }
-
-        } else {
-            console.log("something is not working");
+            } else {}
         }
     });
-
 }
 
 function get_link_from_first_result_selector(div, selector) {
@@ -250,9 +180,7 @@ function get_img_src_from_result_selector(div, selector) {
 }
 
 function make_valid_link_for_user_added_sites(link, host_name, settings) {
-    // add info whthere to add host_name or not
     if (link.startsWith("//")) {
-        console.log("url sratrts with //");
         link = "http:" + link;
     } else if (!link.startsWith("http")) {
         link = "http://" + host_name + "/" + link;
@@ -261,33 +189,26 @@ function make_valid_link_for_user_added_sites(link, host_name, settings) {
 }
 
 function process_price_for_user_added_site(price, settings) {
-    // make settings to remove things like comma and dot symbols
     var price_modified = price.replace(/[^\d^.^,]/g, "");
     return price_modified;
 }
-
 
 function title_filter(product_page_title, search_result_title) {
     var ppt_words_array = product_page_title.split(" ");
     var ppt_split_pos = ppt_words_array.length / 2;
     var ppt_1st_half = ppt_words_array.slice(0, ppt_split_pos);
     var ppt_2nd_half = ppt_words_array.slice(ppt_split_pos);
-
-
     var srt_words_array = search_result_title.split(" ");
     var srt_split_pos = srt_words_array.length / 2;
     var srt_1st_half = srt_words_array.slice(0, srt_split_pos);
     var srt_2nd_half = srt_words_array.slice(srt_split_pos);
-
     var first_half_ok = false;
     var second_half_ok = false;
-
     if (ppt_words_array.length == 1 && srt_words_array.length == 1) {
         if (product_page_title.toLowerCase() == search_result_title.toLowerCase()) {
             return true;
         }
     }
-
     for (var i = 0; i < ppt_1st_half.length; i++) {
         if (srt_1st_half.indexOf(ppt_1st_half[i]) > -1) {
             first_half_ok = true;
