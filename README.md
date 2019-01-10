@@ -69,7 +69,7 @@ This script will have access to the following:
 -this script has access to jquery 
 
 #### Example adding script
-The following scripts is used to add www.amazon.in
+The following scripts is used to add https://www.shop.com
 
 ###### example backsearch script
 ```
