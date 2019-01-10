@@ -3,11 +3,30 @@
 Opsopi is an open source price comparison extension for google chrome, it helps to compare the price of a product across many e-commerce websites.
   
 # How to use OPSOPI
+
+OPSOPI works on the following sites by default
+- [amazon.com](https://www.amazon.com)
+- [bestbuy.com](https://www.bestbuy.com)
+- [costco.com](https://www.costco.com)
+- [ebay.com](https://www.ebay.com/)
+- [jet.com](https://jet.com/)
+- [newegg.com](https://www.newegg.com)
+- [overstock.com](https://www.overstock.com)
+- [target.com](https://www.target.com)
+- [walmart.com](https://www.walmart.com)
+- [abebooks.com](https://www.abebooks.com)
+- [alibris.com](https://www.alibris.com)
+- [barnesandnoble.com](https://www.barnesandnoble.com/)
+- [strandbooks.com](https://www.strandbooks.com/)
+- [thriftbooks.com](https://www.thriftbooks.com/)
+
+
 ### Find low prices without doing anything
 - OPSOPI will appear on product pages
 - Click on the OPSOPI to see price of the product in other sites
 - Click on a result to go to the product page on other sites
 ![demo1](./demo.gif)
+![demo2](./demo2.gif)
 
 ### Extending OPSOPI
 Apart from the sites OPSOPI works by default, users can make it to work on whatever sites they want.
@@ -54,134 +73,96 @@ The following scripts is used to add www.amazon.in
 
 ###### example backsearch script
 ```
-var prod_srch_enc = encodeURIComponentFix($.trim(prod_title));
+ // This script will have access to the following
+ // prod_title (title of the product)
+ // website (website name)
+ // success_call_back (call back to pass the found result)
+ // success_call_back accepts prod_link,title,prod_price,website,img_src of the found product
+ // fail_call_back ()
+// jquery
 
-var req = $.ajax({
-	"type" : "GET",
-	"url" : 'https://www.amazon.in/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords='+prod_srch_enc
-});
-	
+ var req = $.ajax({
+ 	"type": "Get",
+ 	"url":"https://www.shop.com/search/"+encodeURI(prod_title).replace(/%20/g,"+")
+ });
 
-req.done(function(response) {
-	var resp_elem = $('<div/>').append($.parseHTML(response));
-	var avail_val = true;
-	if (resp_elem.find('#atfResults #result_0 ul.rsltL > li:eq(0) span.grey').length>0){
-		avail_val  = (resp_elem.find('#atfResults #result_0 ul.rsltL > li:eq(0) span.grey').html().indexOf('unavailable') == -1);
-	}
+ req.done(function(response){
+ 	var resp_elem = $('<div/>').append($.parseHTML(response));
+ 	var first_result = "";
+ 	var product_title = "";
+ 	var product_link = "";
+ 	var product_price = "";
+ 	var product_img_src = "";
+ 	if($(resp_elem).find(".qa-search-products-results li").length>0){
+ 		first_result = $(resp_elem).find(".qa-search-products-results li")[0];
 
-	if  ((!avail_val) || (resp_elem.find('#noResultsTitle').length>0)){
-		// results not available
-		fail_call_back();
-	}
+	 	if($(first_result).find(".product-results__prod-title-m").length>0){
+	 		product_title = $(first_result).find(".product-results__prod-title-m").text();
+	 	}
 
-	if (resp_elem.find('#atfResults #s-results-list-atf #result_0').length>0){
+	 	if($(first_result).find(".qa-search-product-title-link").length>0){
+	 		product_link = $(first_result).find(".qa-search-product-title-link").attr("href");
+	 	}
+	 	if($(first_result).find(".product-results__final-price-m").length>0){
+	 		product_price = $(first_result).find(".product-results__final-price-m").text().replace(/[$,]/g,"");
+	 	}
+	 	if($(first_result).find(".product-results__prod-image-m").length>0){
+	 		product_img_src = $(first_result).find(".product-results__prod-image-m").attr("src");
+	 	}
 
-		price_hold_all = resp_elem.find('#atfResults #s-results-list-atf #result_0 span.s-price').contents();
-		if (price_hold_all.length==0){
+	 	if(product_title && product_link && product_price && product_img_src){
+	 		success_call_back(product_link,product_title,product_price,"shop.com",product_img_src);
+	 	}else{
+	 		fail_call_back();
+	 	}
 
-			price_hold_all = resp_elem.find('#atfResults #s-results-list-atf #result_0 span.a-color-price').contents();
-		}
+ 	}else{
+ 		fail_call_back();
+ 	}
 
-	} else if (resp_elem.find('#atfResults #result_0 ul.rsltL').length>0){
+ });
 
-		price_hold_all = resp_elem.find('#atfResults #result_0 ul.rsltL li.newp span.bld, #atfResults #result_0 ul.rsltL li.mkp2 span.price, #atfResults #result_0 ul.rsltL li.digp span.bld').contents()
-
-	} else if (resp_elem.find('#atfResults #result_0 ul.rsltGridList').length>0){
-
-		price_hold_all = resp_elem.find('#atfResults #result_0 ul.rsltGridList li.newp span.bld, #atfResults #result_0 ul.rsltGridList li.mkp2 span.price, #atfResults #result_0 ul.rsltGridList li.digp span.bld').contents();
-	} 
-
-	price_str = textFind(price_hold_all);
-	if (price_str.length==0){
-		price_str = textFind(price_hold_all,-1);
-	}
-	var prodlink_href = resp_elem.find('#atfResults #result_0 a.s-access-detail-page').attr('href');
-	var prodlink_txt = $.trim(resp_elem.find('#atfResults #result_0 a.s-access-detail').attr('title'));
-	var prod_img = resp_elem.find('#atfResults #result_0 img.s-access-image').attr('src');
-	if (prodlink_txt==''){
-		prodlink_txt = $.trim(resp_elem.find('#atfResults #result_0 h2.s-access-title').html());
-	}	
-	var price_str=$.trim(price_str.replace(/rs\.*|\*|\,/gi,''));
-	// success call back if everything is available
-	success_call_back(prodlink_href,prodlink_txt,price_str,"amazon.in",prod_img);
-});
-
-
-req.fail(function(){
-	fail_call_back();
-})
-
-function encodeURIComponentFix(in_str) {
-	return encodeURIComponent(in_str).replace(/%20/g,'+').replace(/[!'()]/g, escape).replace(/\*/g, "%2A");
-}
-
-function textFind(contents_arr, parse_type) {
-	var price_val='';
-	//nodetype only fetches textnode
-	$.each(contents_arr, function () {
-			if ((this.nodeType === 3) && $.trim($(this).text())!=''){
-					price_val += ' '+$.trim($(this).text());
-				} //ifloop
-			}); // eachFunction
-
-	return cleanPrice(price_val,parse_type);
-	
-}
-
-
-function cleanPrice(in_str,parse_type) {
-
-    if (in_str==undefined || in_str=='') {
-        console.log('whoa price is bare naked!');
-        return '';
-    }
-
-	parse_type = typeof parse_type !== 'undefined' ? parse_type : 0;
-
-	//console.log('PARSE_TYPE IS: '+parse_type);
-
-	var clean_price_str = $.trim(in_str.replace(/rs\.*|\*|\,|\:/gi,''));
-
-	if (parse_type==0) {
-		clean_price_str = clean_price_str.split(/\s+/g)[0];
-	} else if (parse_type==-1) {
-		clean_price_str = clean_price_str.split(/\s+/g).pop();
-	} else {
-		clean_price_str = clean_price_str.split(/\s+/g)[parse_type];
-	}	
-
-
-	if (isNaN(parseFloat(clean_price_str))) {
-	//if the string is still notafloatthengocharbychar
-	    return clean_price_str.split("").filter(function(each) {
-        		if (!isNaN(each) || (each=='.')) {
-               		return each;
-        		}//if
-    			}).join(''); //func                                                                           
-        
-	} //if
-	else {
-	 return clean_price_str;  
-	}
-
-
-} 
+ req.fail(function(){
+ 	fail_call_back();
+ });
 ```
 
 ###### Example product page script
 
 ```
+ // This script will have access to the following
+ // page_html (html of the product page)
+ // website (website name)
+ // success_call_back (callback to call when details are extracted from the product page)
+ // success_call_back accepts the following arguments title,prod_price,img_src,website
+ // fail_call_back
+
 var html_elem = $('<div/>').append($.parseHTML(page_html));
 
-var title = $(html_elem).find("#productTitle") && $(html_elem).find("#productTitle").text();
-var price = $(html_elem).find("#priceblock_ourprice") && $(html_elem).find("#priceblock_ourprice").text();
-var image_src = $(html_elem).find("#imgTagWrapperId img") && $(html_elem).find("#imgTagWrapperId img").attr("src");
+var title = "";
+var prod_price = "";
+var img_src = "";
 
-if(title && price && image_src){
-	console.log("found all 3 in az_pp");
-	success_call_back(title,price,image_src,website);
+
+if($(html_elem).find("#product").length>0){
+	if($(html_elem).find(".product__title:eq(0)").length>0){
+		title = $(html_elem).find(".product__title:eq(0)").text();
+	}
+	if($(html_elem).find("#product-price").length>0){
+		prod_price = $(html_elem).find("#product-price").text().replace(/[$,]/g,"");
+	}
+	if($(html_elem).find(".product__image").length>0){
+		img_src = $(html_elem).find(".product__image").attr("src");
+	}
+
+	if(title && prod_price && img_src){
+		success_call_back(title,prod_price,img_src,"shop.com");
+	}else{
+		fail_call_back();	
+	}
+	
+
 }else{
-	console.log("some attributes are not found in az_pp");
 	fail_call_back();
 }
 ```
@@ -197,7 +178,7 @@ This needs improvement as it fails often
 - Click on the opsopi icon on the browser bar
 - Click on "Ask to add site" button
 - we will add this site and push an update (sites with most requests will be given priority)
-- people can track the number of requests to add sites on https://opsopi.appspot.com/
+- people can track the number of requests to add sites on https://opsopi.appspot.com/requested
 
 ### Helping OPSOPI
 - You can help opsopi by solving issues https://github.com/durairajaa/opsopi/issues
