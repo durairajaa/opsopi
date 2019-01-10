@@ -11,7 +11,7 @@ Opsopi is an open source price comparison extension for google chrome, it helps 
 
 ![demo1](./demo.gif)
 
-
+<br/>
 
 ![demo2](./demo2.gif)
 
