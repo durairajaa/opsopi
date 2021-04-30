@@ -63,7 +63,8 @@ var prod_site_list = {
     "ab": "alibris",
     "tk": "thriftbooks",
     "po": "powells",
-    "ak": "abebooks"
+    "ak": "abebooks",
+    "bs":"booksmith"
 }
 var closebox = chrome.extension.getURL('design_files/resources/images/close_box.png');
 var closebox_url = 'url(' + closebox + ')';
